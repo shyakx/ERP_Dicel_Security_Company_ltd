@@ -1,0 +1,281 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  password        String
+  firstName       String
+  lastName        String
+  phoneNumber     String?
+  position        String?
+  department      String?
+  dateOfBirth     DateTime?
+  dateJoined      DateTime?
+  role            Role     @default(USER)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  employee        Employee?
+  approvedLeaves  Leave[]  @relation("ApprovedLeaves")
+}
+
+// Employee model
+model Employee {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id])
+  employeeId    String   @unique
+  department    String
+  position      String
+  hireDate      DateTime
+  salary        Float
+  status        Status   @default(ACTIVE)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  assignments   ProjectAssignment[]
+  attendances   Attendance[]
+  leaves        Leave[]
+  payrolls      Payroll[]
+}
+
+// Client model
+model Client {
+  id               String    @id @default(uuid())
+  name             String
+  contactPerson    String?
+  email            String    @unique
+  phone            String?
+  address          String?
+  contractStartDate DateTime?
+  contractEndDate   DateTime?
+  status           Status    @default(ACTIVE)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  projects         Project[]
+}
+
+// Project model
+model Project {
+  id                   String    @id @default(uuid())
+  name                 String
+  description         String?
+  clientId           String
+  client             Client     @relation(fields: [clientId], references: [id])
+  status             Status     @default(ACTIVE)
+  startDate          DateTime
+  endDate            DateTime?
+  location           String
+  securityRequirements String[]
+  numberOfGuards     Int
+  shiftPattern      String
+  equipmentNeeded   String[]
+  budget            Float
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  assignments       ProjectAssignment[]
+  incidents         Incident[]
+  attendances       Attendance[]
+  equipmentAssignments EquipmentAssignment[]
+}
+
+// Project Assignment model
+model ProjectAssignment {
+  id           String   @id @default(uuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id])
+  employeeId   String
+  employee     Employee @relation(fields: [employeeId], references: [id])
+  assignedDate DateTime @default(now())
+  endDate      DateTime?
+  status       Status   @default(ACTIVE)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([projectId, employeeId])
+}
+
+// Attendance model
+model Attendance {
+  id              String   @id @default(uuid())
+  employeeId      String
+  employee        Employee @relation(fields: [employeeId], references: [id])
+  projectId       String?
+  project         Project? @relation(fields: [projectId], references: [id])
+  checkIn         DateTime
+  checkOut        DateTime?
+  status          AttendanceStatus @default(PRESENT)
+  notes           String?
+  location        Json?
+  checkOutLocation Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Leave model
+model Leave {
+  id           String   @id @default(uuid())
+  employeeId   String
+  employee     Employee @relation(fields: [employeeId], references: [id])
+  startDate    DateTime
+  endDate      DateTime
+  type         LeaveType
+  reason       String
+  status       LeaveStatus @default(PENDING)
+  approvedById String?
+  approvedBy   User?    @relation(name: "ApprovedLeaves", fields: [approvedById], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Payroll model
+model Payroll {
+  id           String   @id @default(uuid())
+  employeeId   String
+  employee     Employee @relation(fields: [employeeId], references: [id])
+  month        Int
+  year         Int
+  basicSalary  Float
+  allowances   Float
+  deductions   Float
+  netSalary    Float
+  status       PayrollStatus @default(PENDING)
+  paymentDate  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([employeeId, month, year])
+}
+
+// Equipment model
+model Equipment {
+  id           String   @id @default(uuid())
+  name         String
+  type         String
+  serialNumber String   @unique
+  status       EquipmentStatus @default(AVAILABLE)
+  purchaseDate DateTime
+  lastMaintenance DateTime?
+  nextMaintenance DateTime?
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  assignments  EquipmentAssignment[]
+}
+
+// Equipment Assignment model
+model EquipmentAssignment {
+  id           String   @id @default(uuid())
+  equipmentId  String
+  equipment    Equipment @relation(fields: [equipmentId], references: [id])
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id])
+  assignedDate DateTime @default(now())
+  returnDate   DateTime?
+  status       AssignmentStatus @default(ASSIGNED)
+  notes        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Incident model
+model Incident {
+  id           String   @id @default(uuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id])
+  title        String
+  description  String
+  severity     IncidentSeverity
+  status       IncidentStatus @default(OPEN)
+  reportedBy   String
+  reportedDate DateTime @default(now())
+  resolvedDate DateTime?
+  resolution   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Enums
+enum Role {
+  USER
+  ADMIN
+  MANAGER
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  HALF_DAY
+}
+
+enum LeaveType {
+  ANNUAL
+  SICK
+  MATERNITY
+  PATERNITY
+  BEREAVEMENT
+  UNPAID
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum PayrollStatus {
+  PENDING
+  PROCESSED
+  PAID
+  CANCELLED
+}
+
+enum EquipmentStatus {
+  AVAILABLE
+  ASSIGNED
+  MAINTENANCE
+  RETIRED
+}
+
+enum AssignmentStatus {
+  ASSIGNED
+  RETURNED
+  LOST
+  DAMAGED
+}
+
+enum IncidentSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum IncidentStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
