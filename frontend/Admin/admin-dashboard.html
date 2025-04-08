@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="ERP System for DICEL SECURITY COMPANY">
+    <meta name="author" content="DICEL SECURITY COMPANY">
+    <title>ERP System - Admin Dashboard</title>
+    <!-- Custom fonts for this template-->
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="../css/sb-admin-2.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin-dashboard.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <img src="../img/dicel logo.png" alt="Dicel Security Logo" style="width: 40px; height: 40px; border-radius: 50%;">
+                </div>
+                <div class="sidebar-brand-text mx-3">ERP SYSTEM</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="admin-dashboard.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Management
+            </div>
+
+            <!-- Nav Item - Employee Management -->
+            <li class="nav-item">
+                <a class="nav-link" href="employees.html">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Employee Management</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Payroll -->
+            <li class="nav-item">
+                <a class="nav-link" href="payroll.html">
+                    <i class="fas fa-fw fa-dollar-sign"></i>
+                    <span>Payroll</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Asset Tracking -->
+            <li class="nav-item">
+                <a class="nav-link" href="assets.html">
+                    <i class="fas fa-fw fa-box"></i>
+                    <span>Asset Tracking</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Client Management -->
+            <li class="nav-item">
+                <a class="nav-link" href="clients.html">
+                    <i class="fas fa-fw fa-handshake"></i>
+                    <span>Client Management</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Invoicing -->
+            <li class="nav-item">
+                <a class="nav-link" href="invoices.html">
+                    <i class="fas fa-fw fa-file-invoice"></i>
+                    <span>Invoicing</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Reports
+            </div>
+
+            <!-- Nav Item - Reports -->
+            <li class="nav-item">
+                <a class="nav-link" href="admin-reports.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">Admin Dashboard</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                            <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                        </a>
+                    </div>
+
+                    <!-- Content Row - Summary Cards -->
+                    <div class="row">
+                        <!-- Total Employees Card -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                Total Employees</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">120</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Revenue Card -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Monthly Revenue</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">RWF 45,000,000</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Contracts Card -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                Active Contracts</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">45</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-handshake fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tasks Progress Card -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks Progress
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">85%</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-info" role="progressbar" style="width: 85%"
+                                                            aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Content Row -->
+                    <div class="row">
+                        <!-- Recent Activities -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Recent Activities</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="timeline-item mb-3">
+                                        <div class="font-weight-bold text-primary mb-1">New Contract Signed</div>
+                                        <div class="small text-gray-500">Client: ABC Corporation - 2 hours ago</div>
+                                        <div>Value: RWF 12,000,000 annually</div>
+                                    </div>
+                                    <div class="timeline-item mb-3">
+                                        <div class="font-weight-bold text-success mb-1">Payroll Processed</div>
+                                        <div class="small text-gray-500">March 2024 - 5 hours ago</div>
+                                        <div>120 employees - RWF 15,000,000</div>
+                                    </div>
+                                    <div class="timeline-item mb-3">
+                                        <div class="font-weight-bold text-info mb-1">Equipment Purchased</div>
+                                        <div class="small text-gray-500">Yesterday at 12:45 PM</div>
+                                        <div>Security Cameras - RWF 2,500,000</div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="font-weight-bold text-warning mb-1">Invoice Generated</div>
+                                        <div class="small text-gray-500">Yesterday at 10:30 AM</div>
+                                        <div>Client: XYZ Ltd - RWF 3,500,000</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Business Overview -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Business Overview</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-4">
+                                                <h4 class="small font-weight-bold">Client Satisfaction <span class="float-right">92%</span></h4>
+                                                <div class="progress mb-4">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: 92%"></div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <h4 class="small font-weight-bold">Equipment Utilization <span class="float-right">85%</span></h4>
+                                                <div class="progress mb-4">
+                                                    <div class="progress-bar bg-info" role="progressbar" style="width: 85%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-4">
+                                                <h4 class="small font-weight-bold">Employee Attendance <span class="float-right">95%</span></h4>
+                                                <div class="progress mb-4">
+                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 95%"></div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <h4 class="small font-weight-bold">Training Completion <span class="float-right">78%</span></h4>
+                                                <div class="progress mb-4">
+                                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 78%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <p><strong>Outstanding Invoices:</strong> RWF 8,500,000</p>
+                                        <p><strong>Upcoming Contract Renewals:</strong> 5 contracts in next 30 days</p>
+                                        <p><strong>Equipment Maintenance Due:</strong> 12 items scheduled</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; DICEL SECURITY COMPANY 2023</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script>
+        // Add this CSS to ensure charts fill their containers
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                .chart-area, .chart-pie {
+                    position: relative;
+                    height: 320px;
+                    width: 100%;
+                }
+                canvas {
+                    max-width: 100%;
+                    max-height: 100%;
+                }
+            </style>
+        `);
+
+        // Earnings Overview Chart
+        var ctx = document.getElementById("earningsChart");
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [{
+                    label: "Security Services",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(78, 115, 223, 0.05)",
+                    borderColor: "rgba(78, 115, 223, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                    pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: [25000000, 28000000, 32000000, 35000000, 38000000, 42000000, 45000000, 48000000, 52000000, 55000000, 58000000, 62000000],
+                },
+                {
+                    label: "Equipment Sales",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(28, 200, 138, 0.05)",
+                    borderColor: "rgba(28, 200, 138, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(28, 200, 138, 1)",
+                    pointBorderColor: "rgba(28, 200, 138, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(28, 200, 138, 1)",
+                    pointHoverBorderColor: "rgba(28, 200, 138, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: [8000000, 9500000, 11000000, 12500000, 14000000, 15500000, 17000000, 18500000, 20000000, 21500000, 23000000, 24500000],
+                },
+                {
+                    label: "Training Programs",
+                    lineTension: 0.3,
+                    backgroundColor: "rgba(54, 185, 204, 0.05)",
+                    borderColor: "rgba(54, 185, 204, 1)",
+                    pointRadius: 3,
+                    pointBackgroundColor: "rgba(54, 185, 204, 1)",
+                    pointBorderColor: "rgba(54, 185, 204, 1)",
+                    pointHoverRadius: 3,
+                    pointHoverBackgroundColor: "rgba(54, 185, 204, 1)",
+                    pointHoverBorderColor: "rgba(54, 185, 204, 1)",
+                    pointHitRadius: 10,
+                    pointBorderWidth: 2,
+                    data: [5000000, 5500000, 6000000, 6500000, 7000000, 7500000, 8000000, 8500000, 9000000, 9500000, 10000000, 10500000],
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: 10,
+                        right: 25,
+                        top: 25,
+                        bottom: 0
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'date'
+                        },
+                        gridLines: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 7
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            maxTicksLimit: 5,
+                            padding: 10,
+                            callback: function(value, index, values) {
+                                return 'RWF ' + value.toLocaleString();
+                            }
+                        },
+                        gridLines: {
+                            color: "rgb(234, 236, 244)",
+                            zeroLineColor: "rgb(234, 236, 244)",
+                            drawBorder: false,
+                            borderDash: [2],
+                            zeroLineBorderDash: [2]
+                        }
+                    }],
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom'
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    titleMarginBottom: 10,
+                    titleFontColor: '#6e707e',
+                    titleFontSize: 14,
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    intersect: false,
+                    mode: 'index',
+                    caretPadding: 10,
+                    callbacks: {
+                        label: function(tooltipItem, chart) {
+                            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
+                            return datasetLabel + ': RWF ' + tooltipItem.yLabel.toLocaleString();
+                        }
+                    }
+                }
+            }
+        });
+
+        // Asset Status Chart
+        var ctx = document.getElementById("assetStatusChart");
+        var myPieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ["Assigned", "Available", "In Maintenance", "Retired"],
+                datasets: [{
+                    data: [65, 20, 10, 5],
+                    backgroundColor: ['#4e73df', '#1cc88a', '#f6c23e', '#e74a3b'],
+                    hoverBackgroundColor: ['#2e59d9', '#17a673', '#f4b619', '#e02d1b'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10,
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom'
+                },
+                cutoutPercentage: 80,
+            },
+        });
+
+        // Ensure charts resize when window is resized
+        window.addEventListener('resize', function() {
+            myLineChart.resize();
+            myPieChart.resize();
+        });
+    </script>
+</body>
+
+</html>

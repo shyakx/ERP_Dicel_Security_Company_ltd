@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Visitor Management - ERP System</title>
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jsPDF"></script>
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="security-dashboard.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <img src="../img/dicel logo.png" alt="Dicel Security Logo" style="width: 40px; height: 40px;">
+                </div>
+                <div class="sidebar-brand-text mx-3">ERP SYSTEM</div>
+            </a>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item"><a class="nav-link" href="security-dashboard.html"><i class="fas fa-shield-alt"></i> Security Dashboard</a></li>
+            <hr class="sidebar-divider">
+            <div class="sidebar-heading">Security Operations</div>
+            <li class="nav-item"><a class="nav-link" href="incident-reports.html"><i class="fas fa-exclamation-triangle"></i> Incident Reports</a></li>
+            <li class="nav-item"><a class="nav-link" href="patrol-logs.html"><i class="fas fa-walking"></i> Patrol Logs</a></li>
+            <li class="nav-item"><a class="nav-link" href="shift-management.html"><i class="fas fa-user-clock"></i> Shift Management</a></li>
+            <li class="nav-item"><a class="nav-link" href="emergency-response.html"><i class="fas fa-siren-on"></i> Emergency Response</a></li>
+            <li class="nav-item"><a class="nav-link" href="equipment-tracking.html"><i class="fas fa-toolbox"></i> Equipment Tracking</a></li>
+            <li class="nav-item"><a class="nav-link" href="access-control.html"><i class="fas fa-door-closed"></i> Access Control Logs</a></li>
+            <li class="nav-item"><a class="nav-link" href="security-alerts.html"><i class="fas fa-bell"></i> Security Alerts</a></li>
+            <hr class="sidebar-divider d-none d-md-block">
+            <div class="sidebar-heading">Visitor Management</div>
+            <li class="nav-item active"><a class="nav-link" href="visitor-management.html"><i class="fas fa-toolbox"></i> Visitor Management</a></li>
+        </ul>
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <div id="content">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Security Manager</span>
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="container-fluid">
+                    <h1 class="h3 mb-4 text-gray-800">Visitor Management</h1>
+
+                    <!-- Controls -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addVisitorModal"><i class="fas fa-plus"></i> Add Visitor</button>
+                        <button class="btn btn-success btn-sm" onclick="exportVisitors()"><i class="fas fa-file-download"></i> Export Logs</button>
+                    </div>
+
+                    <!-- Visitor Logs Table -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Current Visitors</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="visitorTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Visitor ID</th>
+                                            <th>Name</th>
+                                            <th>Contact</th>
+                                            <th>Purpose</th>
+                                            <th>Check-in</th>
+                                            <th>Check-out</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="visitorEntries">
+                                        <!-- Dynamic visitor logs here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Dicel Security Company 2025</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Dynamic Visitor Logs -->
+    <script>
+        function loadVisitors() {
+            const visitors = [
+                { id: 'V-001', name: 'John Doe', contact: '+250 788 123 456', purpose: 'Business Meeting', checkIn: '10:00 AM', checkOut: 'N/A', status: 'Checked In' },
+                { id: 'V-002', name: 'Jane Smith', contact: '+250 722 567 890', purpose: 'Supplier Visit', checkIn: '11:30 AM', checkOut: 'N/A', status: 'Checked In' },
+                { id: 'V-003', name: 'Unknown', contact: 'N/A', purpose: 'N/A', checkIn: '02:00 PM', checkOut: 'N/A', status: 'Denied' }
+            ];
+
+            let visitorTable = document.getElementById("visitorEntries");
+            visitorTable.innerHTML = "";
+
+            visitors.forEach(visitor => {
+                let statusClass = visitor.status === 'Checked In' ? 'badge-success' : 'badge-danger';
+                let row = `
+                    <tr>
+                        <td>${visitor.id}</td>
+                        <td>${visitor.name}</td>
+                        <td>${visitor.contact}</td>
+                        <td>${visitor.purpose}</td>
+                        <td>${visitor.checkIn}</td>
+                        <td>${visitor.checkOut}</td>
+                        <td><span class="badge ${statusClass}">${visitor.status}</span></td>
+                    </tr>
+                `;
+                visitorTable.innerHTML += row;
+            });
+
+            setTimeout(loadVisitors, 5000);
+        }
+
+        document.addEventListener("DOMContentLoaded", loadVisitors);
+    </script>
+
+</body>
+</html>
