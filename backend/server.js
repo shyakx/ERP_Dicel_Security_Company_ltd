@@ -2,6 +2,18 @@ const express = require('express');
 const dotenv = require('dotenv');
 const path = require('path');
 const { Client } = require('pg');
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'dicel_erp',
+  password: '0123',
+  port: 5434, // Specify the correct port
+});
+
+module.exports = pool;
 
 // Load environment variables
 dotenv.config();
