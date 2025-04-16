@@ -107,6 +107,14 @@ const seedDatabase = async () => {
       (gen_random_uuid(), (SELECT id FROM public."Project" OFFSET 1 LIMIT 1), (SELECT id FROM public."Employee" OFFSET 1 LIMIT 1), '2023-03-01', 'Security Guard', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
       (gen_random_uuid(), (SELECT id FROM public."Project" OFFSET 2 LIMIT 1), (SELECT id FROM public."Employee" OFFSET 2 LIMIT 1), '2023-02-01', 'Analyst', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
     `);
+    // Insert data into Roles table
+await pool.query(`
+    INSERT INTO public."Roles" (id, name, description)
+    VALUES
+    (gen_random_uuid(), 'Admin', 'Administrator with full access'),
+    (gen_random_uuid(), 'Manager', 'Manager with limited access'),
+    (gen_random_uuid(), 'Employee', 'Regular employee with basic access');
+  `);
 
     console.log('Dummy data inserted successfully!');
   } catch (err) {
