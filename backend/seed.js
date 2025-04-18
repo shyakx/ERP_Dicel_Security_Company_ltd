@@ -1,6 +1,17 @@
 const { Pool } = require('pg');
 require('dotenv').config();
+const bcrypt = require('bcryptjs');
 
+// Hash passwords before inserting
+const hashedPassword1 = await bcrypt.hash('password123', 10);
+const hashedPassword2 = await bcrypt.hash('password456', 10);
+
+await pool.query(`
+  INSERT INTO public."User" (id, email, password, firstName, lastName, role, createdAt, updatedAt)
+  VALUES
+  (gen_random_uuid(), 'admin@example.com', '${hashedPassword1}', 'Admin', 'User', 'ADMIN', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+  (gen_random_uuid(), 'user@example.com', '${hashedPassword2}', 'Regular', 'User', 'USER', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+`);
 // Database connection
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',

@@ -2,18 +2,18 @@ const express = require('express');
 const pool = require('../db'); // Import the database connection
 const router = express.Router();
 
-// Get all users
+// Define the route to fetch all users
 router.get('/', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM public."User"');
+    const result = await pool.query('SELECT * FROM public."User" ORDER BY id ASC');
     res.json(result.rows);
   } catch (err) {
-    console.error(err.message);
+    console.error('Error fetching users:', err.message);
     res.status(500).send('Server Error');
   }
 });
 
-// Get a user by ID
+// Fetch a single user by ID
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -23,24 +23,34 @@ router.get('/:id', async (req, res) => {
     }
     res.json(result.rows[0]);
   } catch (err) {
-    console.error(err.message);
+    console.error('Error fetching user by ID:', err.message);
     res.status(500).send('Server Error');
   }
 });
 
 // Create a new user
 router.post('/', async (req, res) => {
-  const { email, password, firstName, lastName, phoneNumber, position, department, dateOfBirth, dateJoined, role } = req.body;
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    role,
+    phonenumber,
+    position,
+    department,
+    datejoined,
+    dateofbirth,
+  } = req.body; // Include all required fields
+
   try {
     const result = await pool.query(
-      `INSERT INTO public."User" (id, email, password, firstName, lastName, phoneNumber, position, department, dateOfBirth, dateJoined, role, createdAt, updatedAt)
-       VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-       RETURNING *`,
-      [email, password, firstName, lastName, phoneNumber, position, department, dateOfBirth, dateJoined, role]
+      'INSERT INTO public."User" (email, password, firstName, lastName, role, phonenumber, position, department, datejoined, dateofbirth) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
+      [email, password, firstName, lastName, role, phonenumber, position, department, datejoined, dateofbirth]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error(err.message);
+    console.error('Error creating user:', err.message);
     res.status(500).send('Server Error');
   }
 });
@@ -48,21 +58,30 @@ router.post('/', async (req, res) => {
 // Update a user
 router.put('/:id', async (req, res) => {
   const { id } = req.params;
-  const { email, firstName, lastName, phoneNumber, position, department, role } = req.body;
+  const {
+    email,
+    password,
+    firstName,
+    lastName,
+    role,
+    phonenumber,
+    position,
+    department,
+    datejoined,
+    dateofbirth,
+  } = req.body; // Include all required fields
+
   try {
     const result = await pool.query(
-      `UPDATE public."User"
-       SET email = $1, firstName = $2, lastName = $3, phoneNumber = $4, position = $5, department = $6, role = $7, updatedAt = CURRENT_TIMESTAMP
-       WHERE id = $8
-       RETURNING *`,
-      [email, firstName, lastName, phoneNumber, position, department, role, id]
+      'UPDATE public."User" SET email = $1, password = $2, firstName = $3, lastName = $4, role = $5, phonenumber = $6, position = $7, department = $8, datejoined = $9, dateofbirth = $10 WHERE id = $11 RETURNING *',
+      [email, password, firstName, lastName, role, phonenumber, position, department, datejoined, dateofbirth, id]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
     res.json(result.rows[0]);
   } catch (err) {
-    console.error(err.message);
+    console.error('Error updating user:', err.message);
     res.status(500).send('Server Error');
   }
 });
@@ -77,7 +96,7 @@ router.delete('/:id', async (req, res) => {
     }
     res.json({ message: 'User deleted successfully', user: result.rows[0] });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error deleting user:', err.message);
     res.status(500).send('Server Error');
   }
 });

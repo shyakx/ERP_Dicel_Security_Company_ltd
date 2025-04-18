@@ -2,7 +2,7 @@ const express = require('express');
 const usersRouter = require('./users');
 const rolesRouter = require('./roles');
 
-const router = express.Router();
+const router = express.Router(); // Initialize the router
 
 // Mount the routes
 router.use('/users', usersRouter); // Routes for user management
