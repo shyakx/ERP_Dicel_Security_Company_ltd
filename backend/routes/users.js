@@ -1,9 +1,48 @@
 const express = require('express');
-const pool = require('../db'); // Import the database connection
+const pool = require('../db'); // Database connection
+const { hashPassword } = require('../utils/userUtils'); // Import utilities
+const { authenticateToken, authorizeRoles } = require('../middleWare/authMiddleware.js'); // Middleware for route protection
+require('dotenv').config();
+
 const router = express.Router();
 
-// Define the route to fetch all users
-router.get('/', async (req, res) => {
+// Create a new user (Admin only)
+router.post('/', authenticateToken, authorizeRoles('Admin'), async (req, res) => {
+  const {
+    email,
+    password,
+    firstname,
+    lastname,
+    role,
+    phonenumber,
+    position,
+    department,
+    datejoined,
+    dateofbirth,
+  } = req.body;
+
+  // Validate required fields
+  if (!email || !password || !firstname || !lastname || !phonenumber || !position || !role) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  try {
+    // Hash the password
+    const hashedPassword = await hashPassword(password);
+
+    const result = await pool.query(
+      'INSERT INTO public."User" (email, password, firstname, lastname, role, phonenumber, position, department, datejoined, dateofbirth) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
+      [email, hashedPassword, firstname, lastname, role, phonenumber, position, department, datejoined, dateofbirth]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error('Error creating user:', err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// Get all users (Admin and Manager only)
+router.get('/', authenticateToken, authorizeRoles('Admin', 'Manager'), async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM public."User" ORDER BY id ASC');
     res.json(result.rows);
@@ -13,81 +52,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Fetch a single user by ID
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  try {
-    const result = await pool.query('SELECT * FROM public."User" WHERE id = $1', [id]);
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error('Error fetching user by ID:', err.message);
-    res.status(500).send('Server Error');
-  }
-});
-
-// Create a new user
-router.post('/', async (req, res) => {
-  const {
-    email,
-    password,
-    firstName,
-    lastName,
-    role,
-    phonenumber,
-    position,
-    department,
-    datejoined,
-    dateofbirth,
-  } = req.body; // Include all required fields
-
-  try {
-    const result = await pool.query(
-      'INSERT INTO public."User" (email, password, firstName, lastName, role, phonenumber, position, department, datejoined, dateofbirth) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *',
-      [email, password, firstName, lastName, role, phonenumber, position, department, datejoined, dateofbirth]
-    );
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error('Error creating user:', err.message);
-    res.status(500).send('Server Error');
-  }
-});
-
-// Update a user
-router.put('/:id', async (req, res) => {
-  const { id } = req.params;
-  const {
-    email,
-    password,
-    firstName,
-    lastName,
-    role,
-    phonenumber,
-    position,
-    department,
-    datejoined,
-    dateofbirth,
-  } = req.body; // Include all required fields
-
-  try {
-    const result = await pool.query(
-      'UPDATE public."User" SET email = $1, password = $2, firstName = $3, lastName = $4, role = $5, phonenumber = $6, position = $7, department = $8, datejoined = $9, dateofbirth = $10 WHERE id = $11 RETURNING *',
-      [email, password, firstName, lastName, role, phonenumber, position, department, datejoined, dateofbirth, id]
-    );
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.json(result.rows[0]);
-  } catch (err) {
-    console.error('Error updating user:', err.message);
-    res.status(500).send('Server Error');
-  }
-});
-
-// Delete a user
-router.delete('/:id', async (req, res) => {
+// Delete a user (Admin only)
+router.delete('/:id', authenticateToken, authorizeRoles('Admin'), async (req, res) => {
   const { id } = req.params;
   try {
     const result = await pool.query('DELETE FROM public."User" WHERE id = $1 RETURNING *', [id]);

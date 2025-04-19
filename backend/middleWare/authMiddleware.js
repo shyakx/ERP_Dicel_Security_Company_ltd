@@ -1,19 +1,30 @@
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
-
-module.exports = function (req, res, next) {
-  const token = req.header('x-auth-token');
-
+// Middleware to authenticate JWT
+const authenticateToken = (req, res, next) => {
+  const token = req.header('Authorization')?.split(' ')[1]; // Extract token from "Bearer <token>"
   if (!token) {
-    return res.status(401).json({ message: 'No token, authorization denied' });
+    return res.status(401).json({ message: 'Access denied. No token provided.' });
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // Attach the decoded user to the request
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify token
+    req.user = decoded; // Attach user info to the request object
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Token is not valid' });
+    res.status(403).json({ message: 'Invalid or expired token.' });
   }
 };
+
+// Middleware to authorize roles
+const authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
+    }
+    next();
+  };
+};
+
+module.exports = { authenticateToken, authorizeRoles };
