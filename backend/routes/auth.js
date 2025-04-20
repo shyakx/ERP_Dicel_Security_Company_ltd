@@ -50,7 +50,7 @@ router.post(
         },
       });
 
-      const resetUrl = `http://localhost:${process.env.PORT || 5000}/api/auth/password-reset/${resetToken}`;
+      const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/password-reset/${resetToken}`;
       const message = `
         <h1>Password Reset Request</h1>
         <p>You requested a password reset. Click the link below to reset your password:</p>
@@ -68,7 +68,7 @@ router.post(
       res.status(200).json({ message: 'Password reset email sent successfully.' });
     } catch (err) {
       console.error('Error requesting password reset:', err.message);
-      res.status(500).send('Server Error');
+      res.status(500).json({ message: 'Server error. Please try again later.' });
     }
   }
 );
@@ -114,7 +114,7 @@ router.post(
       res.status(200).json({ message: 'Password reset successfully.' });
     } catch (err) {
       console.error('Error resetting password:', err.message);
-      res.status(500).send('Server Error');
+      res.status(500).json({ message: 'Server error. Please try again later.' });
     }
   }
 );
