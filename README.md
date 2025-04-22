@@ -1,7 +1,7 @@
 # **Enterprise Resource Planning (ERP) System**
 
 ## 🚀 **Project Overview**
-This **ERP System** is built to streamline business operations, managing **employees, departments, assets, invoices, projects, and finances** efficiently. The system provides an intuitive **Bootstrap-based UI** for easy navigation and control.
+This **ERP System** is built to streamline business operations, managing **employees, departments, assets, invoices, projects, and finances** efficiently. The system provides an intuitive **Bootstrap-based UI** for easy navigation and control and beautiful charts.
 
 ---
 
