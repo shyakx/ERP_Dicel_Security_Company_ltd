@@ -4,7 +4,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator'); // Add validation
-const pool = require('../db'); // Database connection
+const pool = require('../config/db'); // Database connection
 require('dotenv').config();
 
 const router = express.Router();
@@ -118,5 +118,17 @@ router.post(
     }
   }
 );
+
+// Login route
+router.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        // For now, just return success. In a real app, you would verify credentials
+        res.json({ success: true, message: "Login successful" });
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ error: 'Login failed' });
+    }
+});
 
 module.exports = router;

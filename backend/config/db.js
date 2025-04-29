@@ -1,15 +1,42 @@
 const { Pool } = require('pg');
-require('dotenv').config(); // Load environment variables
 
-// Create a new pool instance
 const pool = new Pool({
-  host: process.env.DATABASE_HOST,
-  port: process.env.DATABASE_PORT,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
+    user: 'postgres',
+    host: 'localhost',
+    database: 'dicel_erp',
+    password: '0123',
+    port: 5434,
+    connectionTimeoutMillis: 5000,
+    idleTimeoutMillis: 30000
 });
 
-console.log('Database pool created'); // Debugging log
+const testConnection = async () => {
+    try {
+        const client = await pool.connect();
+        console.log('Successfully connected to PostgreSQL database');
+        client.release();
+        return true;
+    } catch (err) {
+        console.error('Database connection error:', err.message);
+        console.error('Connection details:', {
+            host: pool.options.host,
+            port: pool.options.port,
+            database: pool.options.database,
+            user: pool.options.user
+        });
+        return false;
+    }
+};
 
-module.exports = pool;
+pool.on('connect', () => {
+    console.log('New client connected to the database');
+});
+
+pool.on('error', (err) => {
+    console.error('Unexpected database error:', err.message);
+});
+
+module.exports = {
+    pool,
+    testConnection
+};
