@@ -100,10 +100,10 @@ router.get('/dashboard', async (req, res) => {
 // Add new employee
 router.post('/employees', async (req, res) => {
     try {
-        const { employeeid, department, position, hiredate, salary, status } = req.body;
+        const { userid, employeeid, department, position, hiredate, salary, status } = req.body;
 
         // Validate input
-        if (![employeeid, department, position, hiredate, salary, status].every(Boolean)) {
+        if (![userid, employeeid, department, position, hiredate, salary, status].every(Boolean)) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
@@ -120,9 +120,9 @@ router.post('/employees', async (req, res) => {
         }
 
         const { rows } = await pool.query(
-            `INSERT INTO "Employee" (employeeid, department, position, hiredate, salary, status) 
-             VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
-            [employeeid, department, position, hiredate, salary, status]
+            `INSERT INTO "Employee" (userid, employeeid, department, position, hiredate, salary, status) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+            [userid, employeeid, department, position, hiredate, salary, status]
         );
 
         res.status(201).json(rows[0]);

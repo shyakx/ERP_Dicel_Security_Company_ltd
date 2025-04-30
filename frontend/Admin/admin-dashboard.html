@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="ERP System for DICEL SECURITY COMPANY">
     <meta name="author" content="DICEL SECURITY COMPANY">
-    <title>ERP System - Admin Dashboard</title>
+    <title>Admin Dashboard</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -15,16 +15,6 @@
     <link href="../css/sb-admin-2.css" rel="stylesheet">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <style>
-        .chart-container {
-            position: relative;
-            height: 370px;
-            width: 100%;
-            margin-bottom: 22px;
-        }
-    </style>
 </head>
 
 <body id="page-top">
@@ -101,7 +91,34 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Topbar content -->
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin User</span>
+                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
                 </nav>
                 <!-- End of Topbar -->
 
@@ -109,13 +126,13 @@
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Admin Dashboard</h1>
-                        <a href="#" id="generateReport" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                             <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
                         </a>
                     </div>
 
-                    <!-- Content Row - Summary Cards -->
+                    <!-- Content Row -->
                     <div class="row">
                         <!-- Total Employees Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -125,7 +142,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Total Employees</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalEmployees">Loading...</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalEmployees">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -137,13 +154,13 @@
 
                         <!-- Monthly Revenue Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Monthly Revenue</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="monthlyRevenue">Loading...</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="monthlyRevenue">RWF 0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -155,41 +172,13 @@
 
                         <!-- Active Contracts Card -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Active Contracts</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="activeContracts">Loading...</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-handshake fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tasks Progress Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-info shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks Progress
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="tasksProgress">Loading...</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar" id="tasksProgressBar" style="width: 0%"
-                                                            aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Active Contracts</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="activeContracts">0</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
@@ -198,30 +187,116 @@
                                 </div>
                             </div>
                         </div>
+
+                        <!-- Tasks Progress Card -->
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                Tasks Progress</div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="tasksProgress">0%</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-warning" role="progressbar"
+                                                            style="width: 0%" aria-valuenow="0" aria-valuemin="0"
+                                                            aria-valuemax="100" id="tasksProgressBar"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-tasks fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Charts Row -->
+                    <!-- Content Row -->
                     <div class="row">
-                        <!-- Bar Chart -->
-                        <div class="col-xl-6 col-lg-6">
+                        <!-- Revenue Chart -->
+                        <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Monthly Revenue Breakdown</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Revenue Overview</h6>
                                 </div>
-                                <div class="card-body chart-container">
-                                    <canvas id="revenueBarChart"></canvas>
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <canvas id="revenueChart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Pie Chart -->
-                        <div class="col-xl-6 col-lg-6">
+                        <!-- Contracts Distribution -->
+                        <div class="col-xl-4 col-lg-5">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Active Contracts by Type</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Contracts by Type</h6>
                                 </div>
-                                <div class="card-body chart-container">
-                                    <canvas id="contractsPieChart"></canvas>
+                                <div class="card-body">
+                                    <div class="chart-pie pt-4">
+                                        <canvas id="contractsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Attendance Summary -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Attendance Summary</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="text-center">
+                                                <span class="text-success">Present</span>
+                                                <h4 id="presentCount">0</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="text-center">
+                                                <span class="text-danger">Absent</span>
+                                                <h4 id="absentCount">0</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Equipment Status -->
+                        <div class="col-lg-6 mb-4">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Equipment Status</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="text-center">
+                                                <span class="text-info">Assigned</span>
+                                                <h4 id="assignedEquipment">0</h4>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="text-center">
+                                                <span class="text-warning">Available</span>
+                                                <h4 id="availableEquipment">0</h4>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -245,6 +320,26 @@
     </div>
     <!-- End of Page Wrapper -->
 
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="../index.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -255,122 +350,118 @@
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
 
-    <!-- Fetch Data from Backend -->
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            fetch("http://localhost:5000/api/admin/dashboard")
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("totalEmployees").textContent = data.totalEmployees;
-                    document.getElementById("monthlyRevenue").textContent = `RWF ${data.monthlyRevenueBreakdown.reduce((a, b) => a + b, 0).toLocaleString()}`;
-                    document.getElementById("activeContracts").textContent = data.contractsByType.active;
-                    document.getElementById("tasksProgress").textContent = `${data.tasksProgress}%`;
-                    document.getElementById("tasksProgressBar").style.width = `${data.tasksProgress}%`;
+        document.addEventListener('DOMContentLoaded', function() {
+            const API_URL = 'http://localhost:5000/api';
 
-                    // Render charts
-                    renderBarChart(data.monthlyRevenueBreakdown);
-                    renderPieChart(data.contractsByType);
-                })
-                .catch(error => console.error("Error fetching data:", error));
+            // Function to format currency
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('rw-RW', {
+                    style: 'currency',
+                    currency: 'RWF',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(amount);
+            }
 
-            function renderBarChart(data) {
-                const ctx = document.getElementById("revenueBarChart").getContext("2d");
-                new Chart(ctx, {
-                    type: "bar",
-                    data: {
-                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                        datasets: [{
-                            label: "Revenue (RWF)",
-                            data: data,
-                            backgroundColor: "rgba(54, 162, 235, 0.6)",
-                            borderColor: "rgba(54, 162, 235, 1)",
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: context => `RWF ${context.raw.toLocaleString()}`
-                                }
-                            }
+            // Function to load dashboard data
+            async function loadDashboardData() {
+                try {
+                    const response = await fetch(`${API_URL}/admin/dashboard`);
+                    const data = await response.json();
+
+                    // Update summary cards
+                    document.getElementById('totalEmployees').textContent = data.totalEmployees;
+                    document.getElementById('monthlyRevenue').textContent = formatCurrency(data.monthlyRevenueBreakdown.reduce((a, b) => a + b, 0));
+                    document.getElementById('activeContracts').textContent = data.contractsByType.active || 0;
+                    document.getElementById('tasksProgress').textContent = `${data.tasksProgress}%`;
+                    document.getElementById('tasksProgressBar').style.width = `${data.tasksProgress}%`;
+                    document.getElementById('tasksProgressBar').setAttribute('aria-valuenow', data.tasksProgress);
+
+                    // Update attendance counts
+                    document.getElementById('presentCount').textContent = data.attendanceSummary.present;
+                    document.getElementById('absentCount').textContent = data.attendanceSummary.absent;
+
+                    // Update equipment status
+                    document.getElementById('assignedEquipment').textContent = data.equipmentAssignments.assigned;
+                    document.getElementById('availableEquipment').textContent = data.equipmentAssignments.returned;
+
+                    // Initialize Revenue Chart
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    new Chart(document.getElementById('revenueChart'), {
+                        type: 'line',
+                        data: {
+                            labels: months,
+                            datasets: [{
+                                label: 'Revenue',
+                                data: data.monthlyRevenueBreakdown,
+                                lineTension: 0.3,
+                                backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                                borderColor: 'rgba(78, 115, 223, 1)',
+                                pointRadius: 3,
+                                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
+                                pointBorderColor: 'rgba(78, 115, 223, 1)',
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
+                                pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
+                                pointHitRadius: 10,
+                                pointBorderWidth: 2
+                            }]
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: value => `RWF ${value.toLocaleString()}`
+                        options: {
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return 'RWF ' + value.toLocaleString();
+                                        }
+                                    }
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false
                                 }
                             }
                         }
-                    }
-                });
-            }
+                    });
 
-            function renderPieChart(data) {
-                const ctx = document.getElementById("contractsPieChart").getContext("2d");
-                new Chart(ctx, {
-                    type: "pie",
-                    data: {
-                        labels: Object.keys(data),
-                        datasets: [{
-                            data: Object.values(data),
-                            backgroundColor: ["rgba(255, 99, 132, 0.6)", "rgba(75, 192, 192, 0.6)"],
-                            borderColor: ["rgba(255, 99, 132, 1)", "rgba(75, 192, 192, 1)"],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: context => `${context.label}: ${context.raw} contracts`
+                    // Initialize Contracts Chart
+                    const contractTypes = Object.keys(data.contractsByType);
+                    const contractCounts = Object.values(data.contractsByType);
+                    new Chart(document.getElementById('contractsChart'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: contractTypes,
+                            datasets: [{
+                                data: contractCounts,
+                                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                                hoverBorderColor: 'rgba(234, 236, 244, 1)'
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'bottom'
                                 }
-                            }
+                            },
+                            cutout: '80%'
                         }
-                    }
-                });
+                    });
+
+                } catch (error) {
+                    console.error('Error loading dashboard data:', error);
+                    alert('Failed to load dashboard data. Please check your connection.');
+                }
             }
-        });
 
-        // Generate Report Button
-        document.getElementById("generateReport").addEventListener("click", async () => {
-            try {
-                const response = await fetch("http://localhost:5000/api/admin/dashboard");
-                if (!response.ok) throw new Error("Failed to fetch dashboard data");
-                const data = await response.json();
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-
-                // Add title
-                doc.setFontSize(18);
-                doc.text("Admin Dashboard Report", 10, 10);
-
-                // Add data
-                doc.setFontSize(12);
-                doc.text(`Total Employees: ${data.totalEmployees}`, 10, 20);
-                const totalRevenue = data.monthlyRevenueBreakdown.reduce((a, b) => a + b, 0);
-                doc.text(`Total Monthly Revenue: RWF ${totalRevenue.toLocaleString()}`, 10, 30);
-                doc.text(`Active Contracts: ${data.contractsByType.active}`, 10, 40);
-                doc.text(`Tasks Progress: ${data.tasksProgress}%`, 10, 50);
-
-                // Add Monthly Revenue Breakdown
-                doc.text("Monthly Revenue Breakdown:", 10, 60);
-                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                data.monthlyRevenueBreakdown.forEach((revenue, index) => {
-                    doc.text(`${months[index]}: RWF ${revenue.toLocaleString()}`, 10, 70 + index * 10);
-                });
-
-                // Save the PDF
-                doc.save("Admin_Dashboard_Report.pdf");
-            } catch (error) {
-                console.error("Error generating report:", error);
-                alert("Failed to generate report. Please try again.");
-            }
+            // Load initial data
+            loadDashboardData();
         });
     </script>
 </body>

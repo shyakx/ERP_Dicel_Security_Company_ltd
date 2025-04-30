@@ -1,249 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="ERP System for DICEL SECURITY COMPANY">
     <meta name="author" content="DICEL SECURITY COMPANY">
-    <title>ERP System - Admin Dashboard</title>
+    <title>Employee Management</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.css" rel="stylesheet">
+    <style>
+        .table-responsive {
+            margin-top: 20px;
+        }
+        .btn-group {
+            margin-bottom: 20px;
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
-
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
-
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin-dashboard.html">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <img src="../img/dicel logo.png" alt="Dicel Security Logo" style="width: 40px; height: 40px; border-radius: 50%;">
+                <div class="sidebar-brand-icon">
+                    <img src="../img/dicel_logo.png" alt="Logo" style="height: 40px;">
                 </div>
-                <div class="sidebar-brand-text mx-3">ERP SYSTEM</div>
+                <div class="sidebar-brand-text mx-3">DICEL ERP</div>
             </a>
-
-            <!-- Divider -->
             <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="admin-dashboard.html">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-
-            <!-- Divider -->
             <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Management
-            </div>
-
-            <!-- Nav Item - Employee Management -->
             <li class="nav-item active">
                 <a class="nav-link" href="employees.html">
                     <i class="fas fa-fw fa-users"></i>
-                    <span>Employee Management</span>
+                    <span>Employees</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="payroll.html">
-                  <i class="fas fa-fw fa-dollar-sign"></i>
-                  <span>Payroll</span>
-                </a>
-              </li>
-
-            <!-- Nav Item - Asset Tracking -->
-            <li class="nav-item">
-                <a class="nav-link" href="assets.html">
-                    <i class="fas fa-fw fa-box"></i>
-                    <span>Asset Tracking</span>
+                    <i class="fas fa-fw fa-money-check-alt"></i>
+                    <span>Payroll</span>
                 </a>
             </li>
-
-            <!-- Nav Item - Client Management -->
             <li class="nav-item">
-                <a class="nav-link" href="clients.html">
-                    <i class="fas fa-fw fa-handshake"></i>
-                    <span>Client Management</span>
-                </a>
-            </li>
-
-            <!-- Nav Item - Invoicing -->
-            <li class="nav-item">
-                <a class="nav-link" href="invoices.html">
-                    <i class="fas fa-fw fa-file-invoice"></i>
-                    <span>Invoicing</span>
-                </a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Reports
-            </div>
-
-            <!-- Nav Item - Reports -->
-            <li class="nav-item">
-                <a class="nav-link" href="admin-reports.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
+                <a class="nav-link" href="reports.html">
+                    <i class="fas fa-fw fa-chart-line"></i>
                     <span>Reports</span>
                 </a>
             </li>
-
-            <!-- Divider -->
+            <li class="nav-item">
+                <a class="nav-link" href="settings.html">
+                    <i class="fas fa-fw fa-cogs"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
             <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
         </ul>
         <!-- End of Sidebar -->
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
-
             <!-- Main Content -->
             <div id="content">
-
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
-                    <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-
-                    <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Topbar Navbar -->
-                    <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - User Information -->
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
-                                <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
-                            </a>
-                            <!-- Dropdown - User Information -->
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
+                    <!-- Topbar content (optional) -->
                 </nav>
                 <!-- End of Topbar -->
-
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Employee Management</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#addEmployeeModal">
-                            <i class="fas fa-plus fa-sm text-white-50"></i> Add Employee
-                        </a>
+                        <div>
+                            <button class="btn btn-danger me-2" id="deleteAllEmployees">
+                                <i class="fas fa-trash"></i> Delete All
+                            </button>
+                            <button class="btn btn-success me-2" id="addSampleEmployees">
+                                <i class="fas fa-users"></i> Add Sample Employees
+                            </button>
+                            <button class="btn btn-primary" id="addEmployeeBtn" data-toggle="modal" data-target="#addEmployeeModal">
+                                <i class="fas fa-plus"></i> Add Employee
+                            </button>
+                        </div>
                     </div>
-
                     <!-- Employee Table -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Employee List</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="employeeTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Role</th>
-                                            <th>Department</th>
-                                            <th>Shift</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>001</td>
-                                            <td>John Doe</td>
-                                            <td>Security Guard</td>
-                                            <td>Operations</td>
-                                            <td>Night Shift</td>
-                                            <td>
-                                                <a href="#" class="btn btn-info btn-circle btn-sm" data-toggle="modal" data-target="#editEmployeeModal">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-danger btn-circle btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>002</td>
-                                            <td>Jane Smith</td>
-                                            <td>HR Manager</td>
-                                            <td>Human Resources</td>
-                                            <td>Day Shift</td>
-                                            <td>
-                                                <a href="#" class="btn btn-info btn-circle btn-sm" data-toggle="modal" data-target="#editEmployeeModal">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a href="#" class="btn btn-danger btn-circle btn-sm">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <th>Department</th>
+                                    <th>Position</th>
+                                    <th>Hire Date</th>
+                                    <th>Salary</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeTableBody">
+                                <!-- Data will be injected here -->
+                            </tbody>
+                        </table>
                     </div>
-
                 </div>
                 <!-- /.container-fluid -->
             </div>
             <!-- End of Main Content -->
+            <!-- Add Employee Modal -->
+            <div class="modal fade" id="addEmployeeModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="addEmployeeForm">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addEmployeeModalLabel">Add New Employee</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="employeeId" class="form-label">Employee ID</label>
+                                    <input type="text" class="form-control" id="employeeId" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="department" class="form-label">Department</label>
+                                    <input type="text" class="form-control" id="department" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="position" class="form-label">Position</label>
+                                    <input type="text" class="form-control" id="position" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="hireDate" class="form-label">Hire Date</label>
+                                    <input type="date" class="form-control" id="hireDate" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="salary" class="form-label">Salary</label>
+                                    <input type="number" step="0.01" class="form-control" id="salary" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-control" id="status" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Terminated">Terminated</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Add Employee</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Edit Employee Modal -->
+            <div class="modal fade" id="editEmployeeModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="editEmployeeModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="editEmployeeForm">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editEmployeeModalLabel">Edit Employee</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="editEmployeeId">
+                                <div class="mb-3">
+                                    <label for="editEmployeeIdField" class="form-label">Employee ID</label>
+                                    <input type="text" class="form-control" id="editEmployeeIdField" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editDepartment" class="form-label">Department</label>
+                                    <input type="text" class="form-control" id="editDepartment" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editPosition" class="form-label">Position</label>
+                                    <input type="text" class="form-control" id="editPosition" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editHireDate" class="form-label">Hire Date</label>
+                                    <input type="date" class="form-control" id="editHireDate" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editSalary" class="form-label">Salary</label>
+                                    <input type="number" step="0.01" class="form-control" id="editSalary" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="editStatus" class="form-label">Status</label>
+                                    <select class="form-control" id="editStatus" required>
+                                        <option value="">Select Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="Terminated">Terminated</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
@@ -257,119 +232,309 @@
         <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Employee Modal -->
-    <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addEmployeeModalLabel">Add Employee</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="employeeName">Name</label>
-                            <input type="text" class="form-control" id="employeeName" placeholder="Enter employee name">
-                        </div>
-                        <div class="form-group">
-                            <label for="employeeRole">Role</label>
-                            <input type="text" class="form-control" id="employeeRole" placeholder="Enter employee role">
-                        </div>
-                        <div class="form-group">
-                            <label for="employeeDepartment">Department</label>
-                            <input type="text" class="form-control" id="employeeDepartment" placeholder="Enter department">
-                        </div>
-                        <div class="form-group">
-                            <label for="employeeShift">Shift</label>
-                            <input type="text" class="form-control" id="employeeShift" placeholder="Enter shift">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-primary" type="button">Add Employee</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Employee Modal -->
-    <div class="modal fade" id="editEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="editEmployeeModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editEmployeeModalLabel">Edit Employee</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="editEmployeeName">Name</label>
-                            <input type="text" class="form-control" id="editEmployeeName" placeholder="Enter employee name">
-                        </div>
-                        <div class="form-group">
-                            <label for="editEmployeeRole">Role</label>
-                            <input type="text" class="form-control" id="editEmployeeRole" placeholder="Enter employee role">
-                        </div>
-                        <div class="form-group">
-                            <label for="editEmployeeDepartment">Department</label>
-                            <input type="text" class="form-control" id="editEmployeeDepartment" placeholder="Enter department">
-                        </div>
-                        <div class="form-group">
-                            <label for="editEmployeeShift">Shift</label>
-                            <input type="text" class="form-control" id="editEmployeeShift" placeholder="Enter shift">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <button class="btn btn-primary" type="button">Save Changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
-</body>
+    <script src="../js/sb-admin-2.min.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const employeeTableBody = document.getElementById("employeeTableBody");
+        const addEmployeeModal = new bootstrap.Modal(document.getElementById('addEmployeeModal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+        const editEmployeeModal = new bootstrap.Modal(document.getElementById('editEmployeeModal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+        const API_URL = 'http://localhost:5000/api';
 
+        // Add Employee button click handler
+        document.getElementById('addEmployeeBtn').addEventListener('click', () => {
+            document.getElementById('addEmployeeForm').reset();
+            addEmployeeModal.show();
+        });
+
+        // Function to populate edit modal with employee data
+        function populateEditModal(employee) {
+            document.getElementById('editEmployeeId').value = employee.id;
+            document.getElementById('editEmployeeIdField').value = employee.employeeid;
+            document.getElementById('editDepartment').value = employee.department;
+            document.getElementById('editPosition').value = employee.position;
+            document.getElementById('editHireDate').value = new Date(employee.hiredate).toISOString().split('T')[0];
+            document.getElementById('editSalary').value = employee.salary;
+            document.getElementById('editStatus').value = employee.status;
+        }
+
+        // Edit form submit handler
+        document.getElementById('editEmployeeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editEmployeeId').value;
+            const updatedEmployee = {
+                employeeid: document.getElementById('editEmployeeIdField').value.trim(),
+                department: document.getElementById('editDepartment').value.trim(),
+                position: document.getElementById('editPosition').value.trim(),
+                hiredate: document.getElementById('editHireDate').value,
+                salary: parseFloat(document.getElementById('editSalary').value),
+                status: document.getElementById('editStatus').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/admin/employees/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedEmployee)
+                });
+
+                if (!response.ok) {
+                    const data = await response.json();
+                    throw new Error(data.error || 'Failed to update employee');
+                }
+
+                logResult('Employee updated successfully!');
+                editEmployeeModal.hide();
+                loadEmployees();
+            } catch (error) {
+                logResult('Error: ' + error.message);
+            }
+        });
+
+        // Function to log results
+        function logResult(message) {
+            console.log(message);
+            alert(message);
+        }
+
+        // Delete all employees and related records
+        async function deleteAllEmployees() {
+            if (!confirm('Are you sure you want to delete all employees and their related records? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                // Delete related records first
+                await fetch(`${API_URL}/admin/attendance`, { method: 'DELETE' });
+                logResult('Deleted all attendance records');
+
+                await fetch(`${API_URL}/admin/equipment-assignments`, { method: 'DELETE' });
+                logResult('Deleted all equipment assignments');
+
+                await fetch(`${API_URL}/admin/leave`, { method: 'DELETE' });
+                logResult('Deleted all leave records');
+
+                await fetch(`${API_URL}/admin/tasks`, { method: 'DELETE' });
+                logResult('Deleted all task records');
+
+                await fetch(`${API_URL}/admin/incidents`, { method: 'DELETE' });
+                logResult('Deleted all incident records');
+
+                // Delete all employees
+                const response = await fetch(`${API_URL}/admin/employees`, { method: 'DELETE' });
+                const data = await response.json();
+                logResult('Deleted all employees successfully');
+                loadEmployees();
+            } catch (error) {
+                logResult('Error: ' + error.message);
+            }
+        }
+
+        // Add sample employees
+        async function addSampleEmployees() {
+            const timestamp = new Date().getTime().toString().slice(-4);
+            const newEmployees = [
+                {
+                    userid: parseInt(timestamp + '001'),
+                    employeeid: `DSC${timestamp}001`,
+                    department: 'Security',
+                    position: 'Security Guard',
+                    hiredate: '2024-01-01',
+                    salary: 2500,
+                    status: 'active'
+                },
+                {
+                    userid: parseInt(timestamp + '002'),
+                    employeeid: `DSC${timestamp}002`,
+                    department: 'Management',
+                    position: 'Operations Manager',
+                    hiredate: '2024-01-01',
+                    salary: 4000,
+                    status: 'active'
+                },
+                {
+                    userid: parseInt(timestamp + '003'),
+                    employeeid: `DSC${timestamp}003`,
+                    department: 'HR',
+                    position: 'HR Manager',
+                    hiredate: '2024-01-01',
+                    salary: 3500,
+                    status: 'active'
+                }
+            ];
+
+            try {
+                for (const employee of newEmployees) {
+                    const response = await fetch(`${API_URL}/admin/employees`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(employee)
+                    });
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `Failed to add employee ${employee.employeeid}`);
+                    }
+                }
+                logResult('Successfully added sample employees');
+                loadEmployees();
+            } catch (error) {
+                logResult('Error: ' + error.message);
+            }
+        }
+
+        // Add event listeners for bulk operations
+        document.getElementById('deleteAllEmployees').addEventListener('click', deleteAllEmployees);
+        document.getElementById('addSampleEmployees').addEventListener('click', addSampleEmployees);
+
+        function loadEmployees() {
+            fetch(`${API_URL}/admin/employees`)
+                .then(response => response.json())
+                .then(data => {
+                    employeeTableBody.innerHTML = "";
+                    data.forEach(employee => {
+                        const hireDate = new Date(employee.hiredate).toISOString().split('T')[0];
+                        const formattedSalary = new Intl.NumberFormat('rw-RW', {
+                            style: 'currency',
+                            currency: 'RWF',
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                        }).format(employee.salary);
+                        
+                        const row = `
+                            <tr>
+                                <td>${employee.employeeid}</td>
+                                <td>${employee.department}</td>
+                                <td>${employee.position}</td>
+                                <td>${hireDate}</td>
+                                <td>${formattedSalary}</td>
+                                <td>${employee.status}</td>
+                                <td>
+                                    <button class="btn btn-info btn-sm edit-btn" data-id="${employee.id}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm delete-btn" data-id="${employee.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                        employeeTableBody.insertAdjacentHTML("beforeend", row);
+                    });
+
+                    // Add edit button click handlers
+                    document.querySelectorAll(".edit-btn").forEach(button => {
+                        button.addEventListener("click", async (e) => {
+                            const id = e.target.closest("button").dataset.id;
+                            try {
+                                const response = await fetch(`${API_URL}/admin/employees/${id}`);
+                                if (!response.ok) throw new Error('Failed to fetch employee data');
+                                const employee = await response.json();
+                                populateEditModal(employee);
+                                editEmployeeModal.show();
+                            } catch (error) {
+                                logResult('Error: ' + error.message);
+                            }
+                        });
+                    });
+
+                    // Add delete button click handlers
+                    document.querySelectorAll(".delete-btn").forEach(button => {
+                        button.addEventListener("click", (e) => {
+                            const id = e.target.closest("button").dataset.id;
+                            if (confirm("Are you sure you want to delete this employee?")) {
+                                deleteEmployee(id);
+                            }
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching employees:", error);
+                    logResult("Failed to load employees. Check server connection.");
+                });
+        }
+        function deleteEmployee(id) {
+            fetch(`http://localhost:5000/api/employees/${id}`, {
+                method: "DELETE",
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Failed to delete employee");
+                }
+                alert("Employee deleted successfully!");
+                loadEmployees();
+            })
+            .catch(error => {
+                console.error("Error deleting employee:", error);
+                alert("Could not delete employee. Try again.");
+            });
+        }
+        document.getElementById("addEmployeeForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const employeeid = document.getElementById("employeeId").value.trim();
+            const department = document.getElementById("department").value.trim();
+            const position = document.getElementById("position").value.trim();
+            const hiredate = document.getElementById("hireDate").value;
+            const salary = parseFloat(document.getElementById("salary").value);
+            const status = document.getElementById("status").value;
+            
+            if (!employeeid || !department || !position || !hiredate || isNaN(salary) || !status) {
+                alert("Please fill all fields properly.");
+                return;
+            }
+            
+            const newEmployee = { employeeid, department, position, hiredate, salary, status };
+            fetch(`${API_URL}/admin/employees`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newEmployee),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(data => {
+                        throw new Error(data.error || "Failed to add employee");
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                logResult("Employee added successfully!");
+                document.getElementById("addEmployeeForm").reset();
+                addEmployeeModal.hide();
+                loadEmployees();
+            })
+            .catch(error => {
+                console.error("Error adding employee:", error);
+                logResult(error.message);
+            });
+        });
+
+        // Add event listener for modal close buttons
+        document.querySelectorAll('[data-dismiss="modal"]').forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal');
+                const modalInstance = bootstrap.Modal.getInstance(modal);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            });
+        });
+
+        loadEmployees();
+    });
+    </script>
+</body>
 </html>

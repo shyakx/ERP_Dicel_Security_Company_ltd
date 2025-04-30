@@ -43,6 +43,7 @@ const startServer = async () => {
         app.use('/api/employees', require('./routes/employees'));
         app.use('/api/auth', require('./routes/auth'));
         app.use('/api/admin/payroll', require('./routes/payroll'));
+        app.use('/api/admin/reports', require('./routes/reports'));
 
         const PORT = 5000;
         app.listen(PORT, () => {
