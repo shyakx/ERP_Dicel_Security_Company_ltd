@@ -5,10 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Settings - DICEL SECURITY COMPANY ERP">
+    <meta name="description" content="ERP System for DICEL SECURITY COMPANY">
     <meta name="author" content="DICEL SECURITY COMPANY">
-    <title>Settings - DICEL Security Company ERP</title>
-    
+    <title>Settings</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -17,8 +16,10 @@
 </head>
 
 <body id="page-top">
+
     <!-- Page Wrapper -->
     <div id="wrapper">
+
         <!-- Sidebar -->
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
             <!-- Sidebar - Brand -->
@@ -82,8 +83,10 @@
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
+
             <!-- Main Content -->
             <div id="content">
+
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
                     <!-- Topbar Navbar -->
@@ -92,7 +95,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin User</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small user-name">Admin User</span>
                                 <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -124,211 +127,188 @@
                         <h1 class="h3 mb-0 text-gray-800">Settings</h1>
                     </div>
 
-                    <!-- Settings Content -->
+                    <!-- Content Row -->
                     <div class="row">
-                        <div class="col-12">
+                        <!-- Company Settings -->
+                        <div class="col-xl-6 col-lg-6">
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <ul class="nav nav-tabs card-header-tabs" id="settingsTabs" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="company-tab" data-toggle="tab" href="#company" role="tab">
-                                                <i class="fas fa-building fa-fw"></i> Company
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="preferences-tab" data-toggle="tab" href="#preferences" role="tab">
-                                                <i class="fas fa-cog fa-fw"></i> Preferences
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="email-tab" data-toggle="tab" href="#email" role="tab">
-                                                <i class="fas fa-envelope fa-fw"></i> Email
-                                            </a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="backup-tab" data-toggle="tab" href="#backup" role="tab">
-                                                <i class="fas fa-database fa-fw"></i> Backup & Restore
-                                            </a>
-                                        </li>
-                                    </ul>
+                                    <h6 class="m-0 font-weight-bold text-primary">Company Settings</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="tab-content" id="settingsTabContent">
-                                        <!-- Company Settings -->
-                                        <div class="tab-pane fade show active" id="company" role="tabpanel">
-                                            <form id="companyForm">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Company Name</label>
-                                                            <input type="text" class="form-control" id="companyName" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Registration Number</label>
-                                                            <input type="text" class="form-control" id="registrationNumber">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Email</label>
-                                                            <input type="email" class="form-control" id="companyEmail">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Phone</label>
-                                                            <input type="tel" class="form-control" id="companyPhone">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Address</label>
-                                                            <textarea class="form-control" id="companyAddress" rows="3"></textarea>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Company Logo</label>
-                                                            <div class="custom-file">
-                                                                <input type="file" class="custom-file-input" id="companyLogo" accept="image/*">
-                                                                <label class="custom-file-label" for="companyLogo">Choose file</label>
-                                                            </div>
-                                                        </div>
-                                                        <div id="logoPreview" class="mt-2"></div>
-                                                    </div>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Save Company Settings</button>
-                                            </form>
+                                    <form id="companySettingsForm">
+                                        <div class="form-group">
+                                            <label for="companyName">Company Name</label>
+                                            <input type="text" class="form-control" id="companyName" required>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="companyAddress">Address</label>
+                                            <textarea class="form-control" id="companyAddress" rows="3" required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="companyPhone">Phone</label>
+                                            <input type="tel" class="form-control" id="companyPhone" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="companyEmail">Email</label>
+                                            <input type="email" class="form-control" id="companyEmail" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="companyLogo">Company Logo</label>
+                                            <input type="file" class="form-control-file" id="companyLogo">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Company Settings</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-                                        <!-- System Preferences -->
-                                        <div class="tab-pane fade" id="preferences" role="tabpanel">
-                                            <form id="preferencesForm">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Default Currency</label>
-                                                            <select class="form-control" id="defaultCurrency">
-                                                                <option value="RWF">Rwandan Franc (RWF)</option>
-                                                                <option value="USD">US Dollar (USD)</option>
-                                                                <option value="EUR">Euro (EUR)</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>Date Format</label>
-                                                            <select class="form-control" id="dateFormat">
-                                                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-                                                                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-                                                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>Time Zone</label>
-                                                            <select class="form-control" id="timeZone">
-                                                                <option value="Africa/Kigali">Africa/Kigali</option>
-                                                                <option value="UTC">UTC</option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="enableNotifications">
-                                                                <label class="custom-control-label" for="enableNotifications">Enable Notifications</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary">Save Preferences</button>
-                                            </form>
+                        <!-- System Settings -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">System Settings</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form id="systemSettingsForm">
+                                        <div class="form-group">
+                                            <label for="timezone">Timezone</label>
+                                            <select class="form-control" id="timezone" required>
+                                                <option value="Africa/Kigali">Africa/Kigali</option>
+                                                <option value="UTC">UTC</option>
+                                            </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="dateFormat">Date Format</label>
+                                            <select class="form-control" id="dateFormat" required>
+                                                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="currency">Currency</label>
+                                            <select class="form-control" id="currency" required>
+                                                <option value="RWF">RWF - Rwandan Franc</option>
+                                                <option value="USD">USD - US Dollar</option>
+                                                <option value="EUR">EUR - Euro</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="language">Language</label>
+                                            <select class="form-control" id="language" required>
+                                                <option value="en">English</option>
+                                                <option value="fr">French</option>
+                                                <option value="rw">Kinyarwanda</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save System Settings</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                        <!-- Email Settings -->
-                                        <div class="tab-pane fade" id="email" role="tabpanel">
-                                            <form id="emailForm">
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>SMTP Server</label>
-                                                            <input type="text" class="form-control" id="smtpServer">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>SMTP Port</label>
-                                                            <input type="number" class="form-control" id="smtpPort">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>SMTP Security</label>
-                                                            <select class="form-control" id="smtpSecurity">
-                                                                <option value="none">None</option>
-                                                                <option value="ssl">SSL</option>
-                                                                <option value="tls">TLS</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>SMTP Username</label>
-                                                            <input type="text" class="form-control" id="smtpUsername">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>SMTP Password</label>
-                                                            <input type="password" class="form-control" id="smtpPassword">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label>From Email</label>
-                                                            <input type="email" class="form-control" id="fromEmail">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary mr-2">Save Email Settings</button>
-                                                <button type="button" class="btn btn-secondary" id="testEmail">Test Email Settings</button>
-                                            </form>
+                    <!-- Content Row -->
+                    <div class="row">
+                        <!-- Security Settings -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Security Settings</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form id="securitySettingsForm">
+                                        <div class="form-group">
+                                            <label for="passwordPolicy">Password Policy</label>
+                                            <select class="form-control" id="passwordPolicy" required>
+                                                <option value="standard">Standard (8 characters, letters and numbers)</option>
+                                                <option value="strong">Strong (12 characters, mixed case, numbers, special)</option>
+                                                <option value="custom">Custom</option>
+                                            </select>
                                         </div>
+                                        <div class="form-group">
+                                            <label for="sessionTimeout">Session Timeout (minutes)</label>
+                                            <input type="number" class="form-control" id="sessionTimeout" min="5" max="1440" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="twoFactorAuth">Two-Factor Authentication</label>
+                                            <select class="form-control" id="twoFactorAuth" required>
+                                                <option value="disabled">Disabled</option>
+                                                <option value="optional">Optional</option>
+                                                <option value="required">Required</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ipWhitelist">IP Whitelist</label>
+                                            <textarea class="form-control" id="ipWhitelist" rows="3" placeholder="Enter IP addresses, one per line"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Security Settings</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-                                        <!-- Backup & Restore -->
-                                        <div class="tab-pane fade" id="backup" role="tabpanel">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="card shadow h-100">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title text-primary">Backup Database</h5>
-                                                            <p class="card-text">Create a backup of your database and settings.</p>
-                                                            <button type="button" class="btn btn-primary" id="createBackup">
-                                                                <i class="fas fa-download fa-fw"></i> Create Backup
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="card shadow h-100">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title text-warning">Restore Database</h5>
-                                                            <p class="card-text">Restore your database from a backup file.</p>
-                                                            <div class="custom-file mb-3">
-                                                                <input type="file" class="custom-file-input" id="restoreFile" accept=".sql,.dump">
-                                                                <label class="custom-file-label" for="restoreFile">Choose file</label>
-                                                            </div>
-                                                            <button type="button" class="btn btn-warning" id="restoreBackup">
-                                                                <i class="fas fa-upload fa-fw"></i> Restore Backup
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                        <!-- Backup Settings -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Backup Settings</h6>
+                                </div>
+                                <div class="card-body">
+                                    <form id="backupSettingsForm">
+                                        <div class="form-group">
+                                            <label for="backupFrequency">Backup Frequency</label>
+                                            <select class="form-control" id="backupFrequency" required>
+                                                <option value="daily">Daily</option>
+                                                <option value="weekly">Weekly</option>
+                                                <option value="monthly">Monthly</option>
+                                            </select>
                                         </div>
-                                    </div>
+                                        <div class="form-group">
+                                            <label for="backupTime">Backup Time</label>
+                                            <input type="time" class="form-control" id="backupTime" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="retentionPeriod">Retention Period (days)</label>
+                                            <input type="number" class="form-control" id="retentionPeriod" min="1" max="365" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="backupLocation">Backup Location</label>
+                                            <input type="text" class="form-control" id="backupLocation" placeholder="Enter backup location path" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-info" id="backupNow">
+                                                <i class="fas fa-download"></i> Backup Now
+                                            </button>
+                                            <button type="button" class="btn btn-success" id="restoreBackup">
+                                                <i class="fas fa-upload"></i> Restore Backup
+                                            </button>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Backup Settings</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- /.container-fluid -->
             </div>
+            <!-- End of Main Content -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright © DICEL Security Company Ltd. 2024</span>
+                        <span>Copyright &copy; DICEL SECURITY COMPANY 2025</span>
                     </div>
                 </div>
             </footer>
             <!-- End of Footer -->
         </div>
+        <!-- End of Content Wrapper -->
     </div>
+    <!-- End of Page Wrapper -->
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -344,7 +324,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../login.html">Logout</a>
+                    <button class="btn btn-primary" type="button">Logout</button>
                 </div>
             </div>
         </div>
@@ -359,6 +339,12 @@
 
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
+    
+    <!-- Custom scripts for this page -->
+    <script src="../js/services/api.service.js"></script>
+    <script src="../js/utils/auth.utils.js"></script>
+    <script src="../js/utils/ui.utils.js"></script>
     <script src="js/settings.js"></script>
 </body>
+
 </html> 

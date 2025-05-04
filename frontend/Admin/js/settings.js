@@ -1,255 +1,287 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Load all settings when the page loads
-    loadAllSettings();
+// Global variables
+let settings = {};
 
-    // Set up form submit handlers
-    setupFormHandlers();
-
-    // Set up backup and restore handlers
-    setupBackupRestore();
+// Initialize the page
+$(document).ready(function() {
+    checkAuth();
+    loadSettings();
+    setupEventListeners();
 });
 
-async function loadAllSettings() {
-    try {
-        // Load company settings
-        const companySettings = await fetch('/api/settings/company').then(res => res.json());
-        document.getElementById('companyName').value = companySettings.company_name || '';
-        document.getElementById('registrationNumber').value = companySettings.registration_number || '';
-        document.getElementById('companyEmail').value = companySettings.email || '';
-        document.getElementById('companyPhone').value = companySettings.phone || '';
-        document.getElementById('companyAddress').value = companySettings.address || '';
-        
-        if (companySettings.logo_url) {
-            const logoPreview = document.getElementById('logoPreview');
-            logoPreview.innerHTML = `<img src="${companySettings.logo_url}" alt="Company Logo" style="max-width: 200px;">`;
+// Check authentication
+function checkAuth() {
+    $.ajax({
+        url: '/api/auth/check',
+        method: 'GET',
+        headers: AuthUtils.getAuthHeaders(),
+        success: function(response) {
+            if (!response.authenticated || response.role !== 'admin') {
+                window.location.href = '/login.html';
+            }
+        },
+        error: function() {
+            window.location.href = '/login.html';
         }
-
-        // Load system preferences
-        const preferences = await fetch('/api/settings/preferences').then(res => res.json());
-        document.getElementById('defaultCurrency').value = preferences.default_currency || 'RWF';
-        document.getElementById('dateFormat').value = preferences.date_format || 'YYYY-MM-DD';
-        document.getElementById('timeZone').value = preferences.time_zone || 'Africa/Kigali';
-        document.getElementById('enableNotifications').checked = preferences.enable_notifications || false;
-
-        // Load email settings
-        const emailSettings = await fetch('/api/settings/email').then(res => res.json());
-        document.getElementById('smtpServer').value = emailSettings.smtp_server || '';
-        document.getElementById('smtpPort').value = emailSettings.smtp_port || '';
-        document.getElementById('smtpSecurity').value = emailSettings.smtp_security || 'none';
-        document.getElementById('smtpUsername').value = emailSettings.smtp_username || '';
-        document.getElementById('smtpPassword').value = emailSettings.smtp_password || '';
-        document.getElementById('fromEmail').value = emailSettings.from_email || '';
-
-    } catch (error) {
-        showToast('Error loading settings', 'error');
-        console.error('Error loading settings:', error);
-    }
+    });
 }
 
-function setupFormHandlers() {
+// Load settings
+function loadSettings() {
+    UiUtils.showLoading();
+    $.ajax({
+        url: '/api/settings',
+        method: 'GET',
+        headers: AuthUtils.getAuthHeaders(),
+        success: function(response) {
+            settings = response;
+            updateForms();
+        },
+        error: function(xhr) {
+            UiUtils.showNotification('Error loading settings: ' + (xhr.responseJSON?.message || 'Unknown error'), 'danger');
+        },
+        complete: function() {
+            UiUtils.hideLoading();
+        }
+    });
+}
+
+// Update forms with loaded settings
+function updateForms() {
+    // Company Settings
+    $('#companyName').val(settings.company?.name || '');
+    $('#companyAddress').val(settings.company?.address || '');
+    $('#companyPhone').val(settings.company?.phone || '');
+    $('#companyEmail').val(settings.company?.email || '');
+
+    // System Settings
+    $('#timezone').val(settings.system?.timezone || 'Africa/Kigali');
+    $('#dateFormat').val(settings.system?.dateFormat || 'DD/MM/YYYY');
+    $('#currency').val(settings.system?.currency || 'RWF');
+    $('#language').val(settings.system?.language || 'en');
+
+    // Security Settings
+    $('#passwordPolicy').val(settings.security?.passwordPolicy || 'standard');
+    $('#sessionTimeout').val(settings.security?.sessionTimeout || 30);
+    $('#twoFactorAuth').val(settings.security?.twoFactorAuth || 'disabled');
+    $('#ipWhitelist').val(settings.security?.ipWhitelist?.join('\n') || '');
+
+    // Backup Settings
+    $('#backupFrequency').val(settings.backup?.frequency || 'daily');
+    $('#backupTime').val(settings.backup?.time || '00:00');
+    $('#retentionPeriod').val(settings.backup?.retentionPeriod || 30);
+    $('#backupLocation').val(settings.backup?.location || '');
+}
+
+// Setup event listeners
+function setupEventListeners() {
     // Company Settings Form
-    document.getElementById('companyForm').addEventListener('submit', async (e) => {
+    $('#companySettingsForm').on('submit', function(e) {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('company_name', document.getElementById('companyName').value);
-        formData.append('registration_number', document.getElementById('registrationNumber').value);
-        formData.append('email', document.getElementById('companyEmail').value);
-        formData.append('phone', document.getElementById('companyPhone').value);
-        formData.append('address', document.getElementById('companyAddress').value);
-
-        const logoFile = document.getElementById('companyLogo').files[0];
+        formData.append('name', $('#companyName').val());
+        formData.append('address', $('#companyAddress').val());
+        formData.append('phone', $('#companyPhone').val());
+        formData.append('email', $('#companyEmail').val());
+        
+        const logoFile = $('#companyLogo')[0].files[0];
         if (logoFile) {
             formData.append('logo', logoFile);
         }
 
-        try {
-            const response = await fetch('/api/settings/company', {
-                method: 'POST',
-                body: formData
-            });
-            
-            if (response.ok) {
-                showToast('Company settings saved successfully', 'success');
-                loadAllSettings(); // Reload settings to show updated values
-            } else {
-                throw new Error('Failed to save company settings');
+        UiUtils.showLoading();
+        $.ajax({
+            url: '/api/settings/company',
+            method: 'PUT',
+            headers: AuthUtils.getAuthHeaders(),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function() {
+                loadSettings();
+                UiUtils.showNotification('Company settings updated successfully', 'success');
+            },
+            error: function(xhr) {
+                UiUtils.showNotification('Error updating company settings: ' + (xhr.responseJSON?.message || 'Unknown error'), 'danger');
+            },
+            complete: function() {
+                UiUtils.hideLoading();
             }
-        } catch (error) {
-            showToast('Error saving company settings', 'error');
-            console.error('Error:', error);
-        }
+        });
     });
 
-    // System Preferences Form
-    document.getElementById('preferencesForm').addEventListener('submit', async (e) => {
+    // System Settings Form
+    $('#systemSettingsForm').on('submit', function(e) {
         e.preventDefault();
-        const data = {
-            default_currency: document.getElementById('defaultCurrency').value,
-            date_format: document.getElementById('dateFormat').value,
-            time_zone: document.getElementById('timeZone').value,
-            enable_notifications: document.getElementById('enableNotifications').checked
+        const systemSettings = {
+            timezone: $('#timezone').val(),
+            dateFormat: $('#dateFormat').val(),
+            currency: $('#currency').val(),
+            language: $('#language').val()
         };
 
-        try {
-            const response = await fetch('/api/settings/preferences', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (response.ok) {
-                showToast('System preferences saved successfully', 'success');
-            } else {
-                throw new Error('Failed to save system preferences');
+        UiUtils.showLoading();
+        $.ajax({
+            url: '/api/settings/system',
+            method: 'PUT',
+            headers: AuthUtils.getAuthHeaders(),
+            data: systemSettings,
+            success: function() {
+                loadSettings();
+                UiUtils.showNotification('System settings updated successfully', 'success');
+            },
+            error: function(xhr) {
+                UiUtils.showNotification('Error updating system settings: ' + (xhr.responseJSON?.message || 'Unknown error'), 'danger');
+            },
+            complete: function() {
+                UiUtils.hideLoading();
             }
-        } catch (error) {
-            showToast('Error saving system preferences', 'error');
-            console.error('Error:', error);
-        }
+        });
     });
 
-    // Email Settings Form
-    document.getElementById('emailForm').addEventListener('submit', async (e) => {
+    // Security Settings Form
+    $('#securitySettingsForm').on('submit', function(e) {
         e.preventDefault();
-        const data = {
-            smtp_server: document.getElementById('smtpServer').value,
-            smtp_port: document.getElementById('smtpPort').value,
-            smtp_security: document.getElementById('smtpSecurity').value,
-            smtp_username: document.getElementById('smtpUsername').value,
-            smtp_password: document.getElementById('smtpPassword').value,
-            from_email: document.getElementById('fromEmail').value
+        const securitySettings = {
+            passwordPolicy: $('#passwordPolicy').val(),
+            sessionTimeout: parseInt($('#sessionTimeout').val()),
+            twoFactorAuth: $('#twoFactorAuth').val(),
+            ipWhitelist: $('#ipWhitelist').val().split('\n').filter(ip => ip.trim())
         };
 
-        try {
-            const response = await fetch('/api/settings/email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            
-            if (response.ok) {
-                showToast('Email settings saved successfully', 'success');
-            } else {
-                throw new Error('Failed to save email settings');
+        UiUtils.showLoading();
+        $.ajax({
+            url: '/api/settings/security',
+            method: 'PUT',
+            headers: AuthUtils.getAuthHeaders(),
+            data: securitySettings,
+            success: function() {
+                loadSettings();
+                UiUtils.showNotification('Security settings updated successfully', 'success');
+            },
+            error: function(xhr) {
+                UiUtils.showNotification('Error updating security settings: ' + (xhr.responseJSON?.message || 'Unknown error'), 'danger');
+            },
+            complete: function() {
+                UiUtils.hideLoading();
             }
-        } catch (error) {
-            showToast('Error saving email settings', 'error');
-            console.error('Error:', error);
-        }
+        });
     });
 
-    // Test Email Settings
-    document.getElementById('testEmail').addEventListener('click', async () => {
-        try {
-            const response = await fetch('/api/settings/email/test', {
-                method: 'POST'
-            });
-            
-            if (response.ok) {
-                showToast('Test email sent successfully', 'success');
-            } else {
-                throw new Error('Failed to send test email');
-            }
-        } catch (error) {
-            showToast('Error sending test email', 'error');
-            console.error('Error:', error);
-        }
-    });
-}
+    // Backup Settings Form
+    $('#backupSettingsForm').on('submit', function(e) {
+        e.preventDefault();
+        const backupSettings = {
+            frequency: $('#backupFrequency').val(),
+            time: $('#backupTime').val(),
+            retentionPeriod: parseInt($('#retentionPeriod').val()),
+            location: $('#backupLocation').val()
+        };
 
-function setupBackupRestore() {
-    // Create Backup
-    document.getElementById('createBackup').addEventListener('click', async () => {
-        try {
-            const response = await fetch('/api/settings/backup', {
-                method: 'POST'
-            });
-            
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `dicel_backup_${new Date().toISOString().split('T')[0]}.sql`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                a.remove();
-                showToast('Backup created successfully', 'success');
-            } else {
-                throw new Error('Failed to create backup');
+        UiUtils.showLoading();
+        $.ajax({
+            url: '/api/settings/backup',
+            method: 'PUT',
+            headers: AuthUtils.getAuthHeaders(),
+            data: backupSettings,
+            success: function() {
+                loadSettings();
+                UiUtils.showNotification('Backup settings updated successfully', 'success');
+            },
+            error: function(xhr) {
+                UiUtils.showNotification('Error updating backup settings: ' + (xhr.responseJSON?.message || 'Unknown error'), 'danger');
+            },
+            complete: function() {
+                UiUtils.hideLoading();
             }
-        } catch (error) {
-            showToast('Error creating backup', 'error');
-            console.error('Error:', error);
-        }
+        });
     });
 
-    // Restore Backup
-    document.getElementById('restoreBackup').addEventListener('click', async () => {
-        const fileInput = document.getElementById('restoreFile');
-        if (!fileInput.files.length) {
-            showToast('Please select a backup file', 'warning');
-            return;
-        }
+    // Backup Now Button
+    $('#backupNow').on('click', function() {
+        UiUtils.confirmDialog('Are you sure you want to create a backup now?')
+            .then(confirmed => {
+                if (confirmed) {
+                    UiUtils.showLoading();
+                    $.ajax({
+                        url: '/api/settings/backup/now',
+                        method: 'POST',
+                        headers: AuthUtils.getAuthHeaders(),
+                        success: function(response) {
+                            const link = document.createElement('a');
+                            link.href = response.download_url;
+                            link.download = 'backup_' + new Date().toISOString().split('T')[0] + '.zip';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                            UiUtils.showNotification('Backup created successfully', 'success');
+                        },
+                        error: function(xhr) {
+                            UiUtils.showNotification('Error creating backup: ' + (xhr.responseJSON?.message || 'Unknown error'), 'danger');
+                        },
+                        complete: function() {
+                            UiUtils.hideLoading();
+                        }
+                    });
+                }
+            });
+    });
 
+    // Restore Backup Button
+    $('#restoreBackup').on('click', function() {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = '.zip';
+        
+        fileInput.onchange = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                UiUtils.confirmDialog('Are you sure you want to restore from this backup? This will overwrite current data.')
+                    .then(confirmed => {
+                        if (confirmed) {
         const formData = new FormData();
-        formData.append('backup', fileInput.files[0]);
+                            formData.append('backup', file);
 
-        try {
-            const response = await fetch('/api/settings/restore', {
+                            UiUtils.showLoading();
+                            $.ajax({
+                                url: '/api/settings/backup/restore',
                 method: 'POST',
-                body: formData
-            });
-            
-            if (response.ok) {
-                showToast('Backup restored successfully', 'success');
-                setTimeout(() => window.location.reload(), 2000);
-            } else {
-                throw new Error('Failed to restore backup');
-            }
-        } catch (error) {
-            showToast('Error restoring backup', 'error');
-            console.error('Error:', error);
+                                headers: AuthUtils.getAuthHeaders(),
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function() {
+                                    UiUtils.showNotification('Backup restored successfully', 'success');
+                                    setTimeout(() => {
+                                        window.location.reload();
+                                    }, 2000);
+                                },
+                                error: function(xhr) {
+                                    UiUtils.showNotification('Error restoring backup: ' + (xhr.responseJSON?.message || 'Unknown error'), 'danger');
+                                },
+                                complete: function() {
+                                    UiUtils.hideLoading();
+                                }
+                            });
         }
     });
 }
+        };
+        
+        fileInput.click();
+    });
 
-function showToast(message, type = 'info') {
-    // Create toast container if it doesn't exist
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
-        document.body.appendChild(toastContainer);
-    }
-
-    // Create toast element
-    const toastHtml = `
-        <div class="toast align-items-center text-white bg-${type === 'error' ? 'danger' : type} border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    ${message}
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    `;
-
-    // Add toast to container
-    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
-
-    // Initialize and show the toast
-    const toastElement = toastContainer.lastElementChild;
-    const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
-    toast.show();
-
-    // Remove toast after it's hidden
-    toastElement.addEventListener('hidden.bs.toast', () => {
-        toastElement.remove();
+    // Logout
+    $('#logoutModal .btn-primary').on('click', function() {
+        $.ajax({
+            url: '/api/auth/logout',
+            method: 'POST',
+            headers: AuthUtils.getAuthHeaders(),
+            success: function() {
+                window.location.href = '/login.html';
+            },
+            error: function() {
+                window.location.href = '/login.html';
+            }
+        });
     });
 } 

@@ -14,7 +14,7 @@
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.css" rel="stylesheet">
     <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../vendor/chart.js/Chart.min.js"></script>
 </head>
 
 <body id="page-top">
@@ -97,7 +97,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Admin User</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small user-name">Admin User</span>
                                 <img class="img-profile rounded-circle" src="../img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -272,6 +272,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="chart-bar">
+                                        <canvas id="attendanceChart"></canvas>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -296,6 +299,9 @@
                                                 <h4 id="availableEquipment">0</h4>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="chart-bar">
+                                        <canvas id="equipmentChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -334,7 +340,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="../index.html">Logout</a>
+                    <button class="btn btn-primary" type="button">Logout</button>
                 </div>
             </div>
         </div>
@@ -350,120 +356,11 @@
     <!-- Custom scripts for all pages-->
     <script src="../js/sb-admin-2.min.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const API_URL = 'http://localhost:5000/api';
-
-            // Function to format currency
-            function formatCurrency(amount) {
-                return new Intl.NumberFormat('rw-RW', {
-                    style: 'currency',
-                    currency: 'RWF',
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0
-                }).format(amount);
-            }
-
-            // Function to load dashboard data
-            async function loadDashboardData() {
-                try {
-                    const response = await fetch(`${API_URL}/admin/dashboard`);
-                    const data = await response.json();
-
-                    // Update summary cards
-                    document.getElementById('totalEmployees').textContent = data.totalEmployees;
-                    document.getElementById('monthlyRevenue').textContent = formatCurrency(data.monthlyRevenueBreakdown.reduce((a, b) => a + b, 0));
-                    document.getElementById('activeContracts').textContent = data.contractsByType.active || 0;
-                    document.getElementById('tasksProgress').textContent = `${data.tasksProgress}%`;
-                    document.getElementById('tasksProgressBar').style.width = `${data.tasksProgress}%`;
-                    document.getElementById('tasksProgressBar').setAttribute('aria-valuenow', data.tasksProgress);
-
-                    // Update attendance counts
-                    document.getElementById('presentCount').textContent = data.attendanceSummary.present;
-                    document.getElementById('absentCount').textContent = data.attendanceSummary.absent;
-
-                    // Update equipment status
-                    document.getElementById('assignedEquipment').textContent = data.equipmentAssignments.assigned;
-                    document.getElementById('availableEquipment').textContent = data.equipmentAssignments.returned;
-
-                    // Initialize Revenue Chart
-                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                    new Chart(document.getElementById('revenueChart'), {
-                        type: 'line',
-                        data: {
-                            labels: months,
-                            datasets: [{
-                                label: 'Revenue',
-                                data: data.monthlyRevenueBreakdown,
-                                lineTension: 0.3,
-                                backgroundColor: 'rgba(78, 115, 223, 0.05)',
-                                borderColor: 'rgba(78, 115, 223, 1)',
-                                pointRadius: 3,
-                                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
-                                pointBorderColor: 'rgba(78, 115, 223, 1)',
-                                pointHoverRadius: 5,
-                                pointHoverBackgroundColor: 'rgba(78, 115, 223, 1)',
-                                pointHoverBorderColor: 'rgba(78, 115, 223, 1)',
-                                pointHitRadius: 10,
-                                pointBorderWidth: 2
-                            }]
-                        },
-                        options: {
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    ticks: {
-                                        callback: function(value) {
-                                            return 'RWF ' + value.toLocaleString();
-                                        }
-                                    }
-                                }
-                            },
-                            plugins: {
-                                legend: {
-                                    display: false
-                                }
-                            }
-                        }
-                    });
-
-                    // Initialize Contracts Chart
-                    const contractTypes = Object.keys(data.contractsByType);
-                    const contractCounts = Object.values(data.contractsByType);
-                    new Chart(document.getElementById('contractsChart'), {
-                        type: 'doughnut',
-                        data: {
-                            labels: contractTypes,
-                            datasets: [{
-                                data: contractCounts,
-                                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-                                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
-                                hoverBorderColor: 'rgba(234, 236, 244, 1)'
-                            }]
-                        },
-                        options: {
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: true,
-                                    position: 'bottom'
-                                }
-                            },
-                            cutout: '80%'
-                        }
-                    });
-
-                } catch (error) {
-                    console.error('Error loading dashboard data:', error);
-                    alert('Failed to load dashboard data. Please check your connection.');
-                }
-            }
-
-            // Load initial data
-            loadDashboardData();
-        });
-    </script>
+    <!-- Custom scripts for this page -->
+    <script src="../js/services/api.service.js"></script>
+    <script src="../js/utils/auth.utils.js"></script>
+    <script src="../js/utils/ui.utils.js"></script>
+    <script src="js/admin-dashboard.js"></script>
 </body>
 
 </html>

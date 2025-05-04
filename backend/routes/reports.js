@@ -4,284 +4,371 @@ const { pool } = require('../config/db');
 const ExcelJS = require('exceljs');
 const PDFDocument = require('pdfkit-table');
 
-// Get payroll report data
-router.get('/payroll', async (req, res) => {
+// Get Financial Overview Report
+router.get('/financial-overview', async (req, res) => {
     const client = await pool.connect();
     try {
-        const { startDate, endDate, department } = req.query;
+        const { startDate, endDate } = req.query;
 
         // Validate date parameters
         if (!startDate || !endDate) {
             return res.status(400).json({ error: 'Start date and end date are required' });
         }
 
-        // Validate date format
-        const startDateObj = new Date(startDate);
-        const endDateObj = new Date(endDate);
-        
-        if (isNaN(startDateObj.getTime()) || isNaN(endDateObj.getTime())) {
-            return res.status(400).json({ error: 'Invalid date format' });
-        }
-
-        if (startDateObj > endDateObj) {
-            return res.status(400).json({ error: 'Start date cannot be after end date' });
-        }
-
-        // Base query for payroll records
-        let query = `
+        // Get total revenue
+        const { rows: revenueData } = await client.query(`
             SELECT 
-                p.*,
-                e.employeeid as employee_code,
-                e.name,
-                e.position,
-                e.department
-            FROM "Payroll" p
-            JOIN "Employee" e ON p.employeeid = e.id
-            WHERE p.paymentdate BETWEEN $1 AND $2
-        `;
-        let params = [startDate, endDate];
-
-        // Add department filter if specified
-        if (department) {
-            query += ` AND e.department = $3`;
-            params.push(department);
-        }
-
-        // Get payroll records
-        const { rows: payrollRecords } = await client.query(query, params);
-
-        // Return empty data if no records found
-        if (payrollRecords.length === 0) {
-            return res.json({
-                payrollRecords: [],
-                summary: {
-                    totalEmployees: 0,
-                    totalPayroll: 0,
-                    totalDeductions: 0,
-                    averageSalary: 0
-                },
-                departmentDistribution: [],
-                monthlyTrend: []
-            });
-        }
-
-        // Get department distribution
-        const { rows: departmentDistribution } = await client.query(`
-            SELECT 
-                e.department,
-                SUM(p.netsalary) as total
-            FROM "Payroll" p
-            JOIN "Employee" e ON p.employeeid = e.id
-            WHERE p.paymentdate BETWEEN $1 AND $2
-            GROUP BY e.department
+                SUM(amount) as total_revenue,
+                COUNT(*) as total_invoices
+            FROM "Invoices"
+            WHERE invoice_date BETWEEN $1 AND $2
         `, [startDate, endDate]);
 
-        // Get monthly trend
-        const { rows: monthlyTrend } = await client.query(`
+        // Get total expenses
+        const { rows: expenseData } = await client.query(`
             SELECT 
-                TO_CHAR(p.paymentdate, 'YYYY-MM') as month,
-                SUM(p.netsalary) as total
-            FROM "Payroll" p
-            WHERE p.paymentdate BETWEEN $1 AND $2
-            GROUP BY TO_CHAR(p.paymentdate, 'YYYY-MM')
-            ORDER BY month
+                SUM(amount) as total_expenses,
+                COUNT(*) as total_expense_records
+            FROM "Expenses"
+            WHERE expense_date BETWEEN $1 AND $2
         `, [startDate, endDate]);
 
-        // Calculate summary statistics
-        const summary = {
-            totalEmployees: new Set(payrollRecords.map(r => r.employeeid)).size,
-            totalPayroll: payrollRecords.reduce((sum, r) => sum + parseFloat(r.netsalary), 0),
-            totalDeductions: payrollRecords.reduce((sum, r) => sum + parseFloat(r.deductions), 0),
-            averageSalary: payrollRecords.length > 0 ? 
-                payrollRecords.reduce((sum, r) => sum + parseFloat(r.netsalary), 0) / payrollRecords.length : 0
-        };
+        // Get payroll expenses
+        const { rows: payrollData } = await client.query(`
+            SELECT 
+                SUM(netsalary) as total_payroll,
+                COUNT(*) as total_payments
+            FROM "Payroll"
+            WHERE paymentdate BETWEEN $1 AND $2
+        `, [startDate, endDate]);
 
-        // Format the response
-        const formattedRecords = payrollRecords.map(record => ({
-            id: record.id,
-            employeeId: record.employee_code,
-            name: record.name,
-            department: record.department,
-            position: record.position,
-            baseSalary: parseFloat(record.basesalary),
-            allowances: parseFloat(record.allowances),
-            deductions: parseFloat(record.deductions),
-            netSalary: parseFloat(record.netsalary),
-            paymentDate: record.paymentdate,
-            status: record.status
-        }));
+        // Get department-wise expenses
+        const { rows: departmentExpenses } = await client.query(`
+            SELECT 
+                d.name as department,
+                SUM(e.amount) as total_expenses
+            FROM "Expenses" e
+            JOIN "Departments" d ON e.department_id = d.id
+            WHERE e.expense_date BETWEEN $1 AND $2
+            GROUP BY d.name
+        `, [startDate, endDate]);
 
         res.json({
-            payrollRecords: formattedRecords,
-            summary,
-            departmentDistribution,
-            monthlyTrend
+            financialOverview: {
+                totalRevenue: revenueData[0].total_revenue || 0,
+                totalExpenses: expenseData[0].total_expenses || 0,
+                totalPayroll: payrollData[0].total_payroll || 0,
+                netProfit: (revenueData[0].total_revenue || 0) - 
+                          (expenseData[0].total_expenses || 0) - 
+                          (payrollData[0].total_payroll || 0)
+            },
+            departmentExpenses,
+            summary: {
+                totalInvoices: revenueData[0].total_invoices || 0,
+                totalExpenseRecords: expenseData[0].total_expense_records || 0,
+                totalPayments: payrollData[0].total_payments || 0
+            }
         });
 
     } catch (error) {
-        console.error('Error generating payroll report:', error);
-        res.status(500).json({ error: 'Failed to generate payroll report' });
+        console.error('Error generating financial overview report:', error);
+        res.status(500).json({ error: 'Failed to generate financial overview report' });
     } finally {
         client.release();
     }
 });
 
-// Export to Excel
-router.get('/export/excel', async (req, res) => {
+// Get Employee Management Report
+router.get('/employee-management', async (req, res) => {
+    const client = await pool.connect();
     try {
-        const { startDate, endDate, department } = req.query;
-
-        // Get payroll data
-        let query = `
+        // Get total employees
+        const { rows: employeeCount } = await client.query(`
             SELECT 
-                e.employeeid,
-                e.name,
-                e.department,
-                e.position,
-                p.basesalary,
-                p.allowances,
-                p.deductions,
-                p.netsalary,
-                p.paymentdate,
-                p.status
-            FROM "Payroll" p
-            JOIN "Employee" e ON p.employeeid = e.id
-            WHERE p.paymentdate BETWEEN $1 AND $2
+                COUNT(*) as total_employees,
+                COUNT(CASE WHEN status = 'Active' THEN 1 END) as active_employees,
+                COUNT(CASE WHEN status = 'Inactive' THEN 1 END) as inactive_employees
+            FROM "Employee"
+        `);
+
+        // Get department-wise employee distribution
+        const { rows: departmentDistribution } = await client.query(`
+            SELECT 
+                d.name as department,
+                COUNT(e.id) as employee_count,
+                COUNT(CASE WHEN e.status = 'Active' THEN 1 END) as active_count
+            FROM "Departments" d
+            LEFT JOIN "Employee" e ON d.id = e.department_id
+            GROUP BY d.name
+        `);
+
+        // Get attendance statistics
+        const { rows: attendanceStats } = await client.query(`
+            SELECT 
+                COUNT(*) as total_attendance_records,
+                COUNT(CASE WHEN status = 'Present' THEN 1 END) as present_count,
+                COUNT(CASE WHEN status = 'Absent' THEN 1 END) as absent_count,
+                COUNT(CASE WHEN status = 'Late' THEN 1 END) as late_count
+            FROM "Attendance"
+            WHERE date = CURRENT_DATE
+        `);
+
+        // Get leave requests
+        const { rows: leaveStats } = await client.query(`
+            SELECT 
+                COUNT(*) as total_requests,
+                COUNT(CASE WHEN status = 'Approved' THEN 1 END) as approved_count,
+                COUNT(CASE WHEN status = 'Pending' THEN 1 END) as pending_count,
+                COUNT(CASE WHEN status = 'Rejected' THEN 1 END) as rejected_count
+            FROM "LeaveRequests"
+            WHERE request_date >= CURRENT_DATE - INTERVAL '30 days'
+        `);
+
+        res.json({
+            employeeStatistics: employeeCount[0],
+            departmentDistribution,
+            attendanceStats: attendanceStats[0],
+            leaveStats: leaveStats[0]
+        });
+
+    } catch (error) {
+        console.error('Error generating employee management report:', error);
+        res.status(500).json({ error: 'Failed to generate employee management report' });
+    } finally {
+        client.release();
+    }
+});
+
+// Get Department-wise Reports
+router.get('/department/:departmentId', async (req, res) => {
+    const client = await pool.connect();
+    try {
+        const { departmentId } = req.params;
+        const { startDate, endDate } = req.query;
+
+        // Get department details
+        const { rows: departmentInfo } = await client.query(`
+            SELECT * FROM "Departments" WHERE id = $1
+        `, [departmentId]);
+
+        // Get department employees
+        const { rows: employees } = await client.query(`
+            SELECT 
+                e.*,
+                p.position_name
+            FROM "Employee" e
+            LEFT JOIN "Positions" p ON e.position_id = p.id
+            WHERE e.department_id = $1
+        `, [departmentId]);
+
+        // Get department expenses
+        const { rows: expenses } = await client.query(`
+            SELECT * FROM "Expenses"
+            WHERE department_id = $1
+            AND expense_date BETWEEN $2 AND $3
+        `, [departmentId, startDate, endDate]);
+
+        // Get department projects
+        const { rows: projects } = await client.query(`
+            SELECT * FROM "Projects"
+            WHERE department_id = $1
+            AND start_date <= $3
+            AND (end_date >= $2 OR end_date IS NULL)
+        `, [departmentId, startDate, endDate]);
+
+        res.json({
+            departmentInfo: departmentInfo[0],
+            employees,
+            expenses,
+            projects
+        });
+
+    } catch (error) {
+        console.error('Error generating department report:', error);
+        res.status(500).json({ error: 'Failed to generate department report' });
+    } finally {
+        client.release();
+    }
+});
+
+// Get System Logs
+router.get('/system-logs', async (req, res) => {
+    const client = await pool.connect();
+    try {
+        const { startDate, endDate, logType } = req.query;
+
+        let query = `
+            SELECT * FROM "SystemLogs"
+            WHERE timestamp BETWEEN $1 AND $2
         `;
         let params = [startDate, endDate];
 
-        if (department) {
-            query += ` AND e.department = $3`;
-            params.push(department);
+        if (logType) {
+            query += ` AND log_type = $3`;
+            params.push(logType);
         }
 
-        const { rows } = await pool.query(query, params);
+        query += ` ORDER BY timestamp DESC LIMIT 1000`;
+
+        const { rows: logs } = await client.query(query, params);
+
+        // Get log statistics
+        const { rows: logStats } = await client.query(`
+            SELECT 
+                log_type,
+                COUNT(*) as count
+            FROM "SystemLogs"
+            WHERE timestamp BETWEEN $1 AND $2
+            GROUP BY log_type
+        `, [startDate, endDate]);
+
+        res.json({
+            logs,
+            statistics: logStats
+        });
+
+    } catch (error) {
+        console.error('Error retrieving system logs:', error);
+        res.status(500).json({ error: 'Failed to retrieve system logs' });
+    } finally {
+        client.release();
+    }
+});
+
+// Get Employee Reports
+router.get('/employee-reports', async (req, res) => {
+    const client = await pool.connect();
+    try {
+        const { startDate, endDate, departmentId } = req.query;
+
+        let query = `
+            SELECT 
+                e.id,
+                e.name,
+                e.employeeid,
+                d.name as department,
+                p.position_name,
+                COUNT(DISTINCT a.id) as total_reports,
+                COUNT(DISTINCT CASE WHEN a.status = 'Pending' THEN a.id END) as pending_reports,
+                COUNT(DISTINCT CASE WHEN a.status = 'Approved' THEN a.id END) as approved_reports,
+                COUNT(DISTINCT CASE WHEN a.status = 'Rejected' THEN a.id END) as rejected_reports
+            FROM "Employee" e
+            LEFT JOIN "Departments" d ON e.department_id = d.id
+            LEFT JOIN "Positions" p ON e.position_id = p.id
+            LEFT JOIN "EmployeeReports" a ON e.id = a.employee_id
+            WHERE a.report_date BETWEEN $1 AND $2
+        `;
+        let params = [startDate, endDate];
+
+        if (departmentId) {
+            query += ` AND e.department_id = $3`;
+            params.push(departmentId);
+        }
+
+        query += ` GROUP BY e.id, e.name, e.employeeid, d.name, p.position_name`;
+
+        const { rows: employeeReports } = await client.query(query, params);
+
+        res.json({
+            employeeReports
+        });
+
+    } catch (error) {
+        console.error('Error retrieving employee reports:', error);
+        res.status(500).json({ error: 'Failed to retrieve employee reports' });
+    } finally {
+        client.release();
+    }
+});
+
+// Export Reports to Excel
+router.get('/export/:reportType/excel', async (req, res) => {
+    try {
+        const { reportType } = req.params;
+        const { startDate, endDate } = req.query;
+
+        let query;
+        let worksheetName;
+        let columns;
+
+        switch (reportType) {
+            case 'financial':
+                query = `
+                    SELECT 
+                        i.invoice_date,
+                        i.invoice_number,
+                        i.amount as revenue,
+                        e.amount as expense,
+                        p.netsalary as payroll
+                    FROM "Invoices" i
+                    LEFT JOIN "Expenses" e ON i.invoice_date = e.expense_date
+                    LEFT JOIN "Payroll" p ON i.invoice_date = p.paymentdate
+                    WHERE i.invoice_date BETWEEN $1 AND $2
+                `;
+                worksheetName = 'Financial Report';
+                columns = [
+                    { header: 'Date', key: 'invoice_date', width: 15 },
+                    { header: 'Invoice Number', key: 'invoice_number', width: 20 },
+                    { header: 'Revenue', key: 'revenue', width: 15 },
+                    { header: 'Expense', key: 'expense', width: 15 },
+                    { header: 'Payroll', key: 'payroll', width: 15 }
+                ];
+                break;
+
+            case 'employee':
+                query = `
+                    SELECT 
+                        e.name,
+                        e.employeeid,
+                        d.name as department,
+                        p.position_name,
+                        a.status as attendance_status,
+                        l.status as leave_status
+                    FROM "Employee" e
+                    LEFT JOIN "Departments" d ON e.department_id = d.id
+                    LEFT JOIN "Positions" p ON e.position_id = p.id
+                    LEFT JOIN "Attendance" a ON e.id = a.employee_id
+                    LEFT JOIN "LeaveRequests" l ON e.id = l.employee_id
+                    WHERE a.date BETWEEN $1 AND $2
+                `;
+                worksheetName = 'Employee Report';
+                columns = [
+                    { header: 'Name', key: 'name', width: 20 },
+                    { header: 'Employee ID', key: 'employeeid', width: 15 },
+                    { header: 'Department', key: 'department', width: 15 },
+                    { header: 'Position', key: 'position_name', width: 15 },
+                    { header: 'Attendance', key: 'attendance_status', width: 15 },
+                    { header: 'Leave Status', key: 'leave_status', width: 15 }
+                ];
+                break;
+
+            default:
+                return res.status(400).json({ error: 'Invalid report type' });
+        }
+
+        const { rows } = await pool.query(query, [startDate, endDate]);
 
         // Create Excel workbook
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Payroll Report');
+        const worksheet = workbook.addWorksheet(worksheetName);
 
         // Add headers
-        worksheet.columns = [
-            { header: 'Employee ID', key: 'employeeid', width: 15 },
-            { header: 'Name', key: 'name', width: 20 },
-            { header: 'Department', key: 'department', width: 15 },
-            { header: 'Position', key: 'position', width: 15 },
-            { header: 'Base Salary', key: 'basesalary', width: 15 },
-            { header: 'Allowances', key: 'allowances', width: 15 },
-            { header: 'Deductions', key: 'deductions', width: 15 },
-            { header: 'Net Salary', key: 'netsalary', width: 15 },
-            { header: 'Payment Date', key: 'paymentdate', width: 15 },
-            { header: 'Status', key: 'status', width: 12 }
-        ];
+        worksheet.columns = columns;
 
         // Add rows
         worksheet.addRows(rows);
 
         // Set response headers
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        res.setHeader('Content-Disposition', 'attachment; filename=PayrollReport.xlsx');
+        res.setHeader('Content-Disposition', `attachment; filename=${reportType}Report.xlsx`);
 
         // Send workbook
         await workbook.xlsx.write(res);
         res.end();
 
     } catch (error) {
-        console.error('Error exporting to Excel:', error);
-        res.status(500).json({ error: 'Failed to export to Excel' });
-    }
-});
-
-// Export to PDF
-router.get('/export/pdf', async (req, res) => {
-    try {
-        const { startDate, endDate, department } = req.query;
-
-        // Get payroll data
-        let query = `
-            SELECT 
-                e.employeeid,
-                e.name,
-                e.department,
-                e.position,
-                p.basesalary,
-                p.allowances,
-                p.deductions,
-                p.netsalary,
-                p.paymentdate,
-                p.status
-            FROM "Payroll" p
-            JOIN "Employee" e ON p.employeeid = e.id
-            WHERE p.paymentdate BETWEEN $1 AND $2
-        `;
-        let params = [startDate, endDate];
-
-        if (department) {
-            query += ` AND e.department = $3`;
-            params.push(department);
-        }
-
-        const { rows } = await pool.query(query, params);
-
-        // Create PDF document
-        const doc = new PDFDocument();
-        
-        // Set response headers
-        res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=PayrollReport.pdf');
-
-        // Pipe PDF to response
-        doc.pipe(res);
-
-        // Add title
-        doc.fontSize(16).text('Payroll Report', { align: 'center' });
-        doc.moveDown();
-
-        // Add date range
-        doc.fontSize(12).text(`Period: ${startDate} to ${endDate}`, { align: 'center' });
-        doc.moveDown();
-
-        // Add table
-        const table = {
-            headers: ['Employee ID', 'Name', 'Department', 'Position', 'Base Salary', 'Net Salary', 'Status'],
-            rows: rows.map(row => [
-                row.employeeid,
-                row.name,
-                row.department,
-                row.position,
-                `RWF ${parseFloat(row.basesalary).toFixed(2)}`,
-                `RWF ${parseFloat(row.netsalary).toFixed(2)}`,
-                row.status
-            ])
-        };
-
-        await doc.table(table, {
-            prepareHeader: () => doc.fontSize(10),
-            prepareRow: () => doc.fontSize(10)
-        });
-
-        // End document
-        doc.end();
-
-    } catch (error) {
-        console.error('Error exporting to PDF:', error);
-        res.status(500).json({ error: 'Failed to export to PDF' });
-    }
-});
-
-// Get departments
-router.get('/departments', async (req, res) => {
-    try {
-        const { rows } = await pool.query(`
-            SELECT DISTINCT department as name, department as id
-            FROM "Employee"
-            WHERE department IS NOT NULL
-            ORDER BY department
-        `);
-        res.json(rows);
-    } catch (error) {
-        console.error('Error fetching departments:', error);
-        res.status(500).json({ error: 'Failed to fetch departments' });
+        console.error('Error exporting report to Excel:', error);
+        res.status(500).json({ error: 'Failed to export report to Excel' });
     }
 });
 

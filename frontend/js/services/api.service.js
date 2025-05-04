@@ -2,9 +2,9 @@ import AuthUtils from '../utils/auth.utils.js';
 import UiUtils from '../utils/ui.utils.js';
 
 // API Base URL based on environment
-const API_BASE_URL = process.env.NODE_ENV === 'production'
-    ? 'https://dicel-erp-backend.onrender.com/api/v1'
-    : 'http://localhost:5001/api/v1';
+const API_BASE_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:5001/api/v1'
+    : 'https://dicel-erp-backend.onrender.com/api/v1';
 
 class ApiService {
     constructor() {

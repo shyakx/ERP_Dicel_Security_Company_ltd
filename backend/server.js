@@ -1,59 +1,47 @@
 const express = require('express');
-const cors = require('cors');
-const { pool, testConnection } = require('./config/db');
+const cors = require('cors'); // Import the CORS middleware
+const bcrypt = require('bcrypt'); // For password hashing
+const jwt = require('jsonwebtoken'); // For token generation
+
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json()); // Parse JSON request bodies
 
-// Test database connection and setup tables before starting server
-const startServer = async () => {
-    try {
-        // Test database connection
-        const isConnected = await testConnection();
-        if (!isConnected) {
-            console.error('Failed to connect to the database. Please check your PostgreSQL server.');
-            process.exit(1);
-        }
+// Mock user data (replace this with a database query in production)
+const users = [
+    {
+        email: 'admin@example.com',
+        password: bcrypt.hashSync('password123', 10), // Hashed password
+        role: 'admin',
+    },
+];
 
-        // Enable UUID extension
-        await pool.query('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";');
+// Login route
+app.post('/api/login', (req, res) => {
+    const { email, password } = req.body;
 
-        // Create Payroll table
-        await pool.query(`
-            DROP TABLE IF EXISTS "Payroll" CASCADE;
-            CREATE TABLE IF NOT EXISTS "Payroll" (
-                id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-                employeeid UUID REFERENCES "Employee"(id) ON DELETE CASCADE,
-                basesalary DECIMAL(10,2) NOT NULL,
-                allowances DECIMAL(10,2) DEFAULT 0,
-                deductions DECIMAL(10,2) DEFAULT 0,
-                netsalary DECIMAL(10,2) NOT NULL,
-                paymentdate DATE NOT NULL,
-                status VARCHAR(20) CHECK (status IN ('Pending', 'Paid', 'Failed')) NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `);
-        console.log('Database tables created successfully');
-
-        // Routes
-        app.use('/api/admin', require('./routes/admin'));
-        app.use('/api/employees', require('./routes/employees'));
-        app.use('/api/auth', require('./routes/auth'));
-        app.use('/api/admin/payroll', require('./routes/payroll'));
-        app.use('/api/admin/reports', require('./routes/reports'));
-
-        const PORT = 5000;
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-            console.log(`Visit: http://localhost:${PORT}`);
-        });
-    } catch (error) {
-        console.error('Error starting server:', error);
-        process.exit(1);
+    // Find the user by email
+    const user = users.find((u) => u.email === email);
+    if (!user) {
+        return res.status(401).json({ message: 'Invalid credentials' });
     }
-};
 
-startServer();
+    // Compare the provided password with the hashed password
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign({ email: user.email, role: user.role }, 'your-secret-key', { expiresIn: '1h' });
+
+    return res.status(200).json({ message: 'Login successful', token });
+});
+
+// Start the server
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
