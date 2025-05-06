@@ -2,13 +2,11 @@ import AuthUtils from '../utils/auth.utils.js';
 import UiUtils from '../utils/ui.utils.js';
 
 // API Base URL based on environment
-const API_BASE_URL = window.location.hostname === 'localhost'
-    ? 'http://localhost:5001/api/v1'
-    : 'https://dicel-erp-backend.onrender.com/api/v1';
+const API_BASE = 'http://localhost:3000';
 
 class ApiService {
     constructor() {
-        this.baseUrl = API_BASE_URL;
+        this.baseUrl = API_BASE;
     }
 
     // Generic request method with retry logic
@@ -31,7 +29,7 @@ class ApiService {
     // Private method for making requests with retry logic
     async _makeRequest(url, options, retriesLeft) {
         try {
-            const response = await fetch(url, {
+            const response = await fetch(API_BASE + url, {
                 ...options,
                 credentials: 'include',
             });

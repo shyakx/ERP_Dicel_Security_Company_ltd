@@ -4,19 +4,21 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDashboardData();
 });
 
+const API_BASE = 'http://localhost:3000';
+
 // Function to load all dashboard data
 async function loadDashboardData() {
     try {
         // Load security statistics
-        const stats = await fetch('/api/security/statistics').then(res => res.json());
+        const stats = await fetch(API_BASE + '/api/security/statistics').then(res => res.json());
         updateSecurityStats(stats);
 
         // Load recent incidents
-        const recentIncidents = await fetch('/api/security/recent-incidents').then(res => res.json());
+        const recentIncidents = await fetch(API_BASE + '/api/security/recent-incidents').then(res => res.json());
         updateRecentIncidents(recentIncidents);
 
         // Load current shifts
-        const currentShifts = await fetch('/api/security/current-shifts').then(res => res.json());
+        const currentShifts = await fetch(API_BASE + '/api/security/current-shifts').then(res => res.json());
         updateCurrentShifts(currentShifts);
     } catch (error) {
         console.error('Error loading dashboard data:', error);

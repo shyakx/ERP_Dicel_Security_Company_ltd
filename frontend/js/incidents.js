@@ -8,10 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('updateIncidentBtn').addEventListener('click', updateIncident);
 });
 
+const API_BASE = 'http://localhost:3000';
+
 // Load all incidents
 async function loadIncidents() {
     try {
-        const response = await fetch('/api/security/incidents');
+        const response = await fetch(API_BASE + '/api/security/incidents');
         if (!response.ok) {
             throw new Error('Failed to fetch incidents');
         }
@@ -26,7 +28,7 @@ async function loadIncidents() {
 // Load all guards for dropdowns
 async function loadGuards() {
     try {
-        const response = await fetch('/api/security/guards');
+        const response = await fetch(API_BASE + '/api/security/guards');
         if (!response.ok) {
             throw new Error('Failed to fetch guards');
         }
@@ -131,7 +133,7 @@ async function addIncident() {
     };
 
     try {
-        const response = await fetch('/api/security/incidents', {
+        const response = await fetch(API_BASE + '/api/security/incidents', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -157,7 +159,7 @@ async function addIncident() {
 // Edit incident
 async function editIncident(id) {
     try {
-        const response = await fetch(`/api/security/incidents/${id}`);
+        const response = await fetch(API_BASE + `/api/security/incidents/${id}`);
         if (!response.ok) {
             throw new Error('Failed to fetch incident details');
         }
@@ -196,7 +198,7 @@ async function updateIncident() {
     };
 
     try {
-        const response = await fetch(`/api/security/incidents/${id}`, {
+        const response = await fetch(API_BASE + `/api/security/incidents/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -226,7 +228,7 @@ async function deleteIncident(id) {
     }
 
     try {
-        const response = await fetch(`/api/security/incidents/${id}`, {
+        const response = await fetch(API_BASE + `/api/security/incidents/${id}`, {
             method: 'DELETE'
         });
 

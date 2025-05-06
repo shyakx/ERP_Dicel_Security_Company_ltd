@@ -13,7 +13,7 @@ $(document).ready(function() {
 // Check authentication
 function checkAuth() {
     $.ajax({
-        url: '/api/auth/check',
+        url: 'http://localhost:3000/api/auth/check',
         method: 'GET',
         headers: AuthUtils.getAuthHeaders(),
         success: function(response) {

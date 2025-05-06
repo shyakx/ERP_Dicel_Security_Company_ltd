@@ -10,10 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('addPaymentBtn').addEventListener('click', showAddPaymentModal);
 });
 
+const API_BASE = 'http://localhost:3000';
+
 // Function to load payroll data
 async function loadPayrollData() {
     try {
-        const response = await fetch('/api/admin/payroll');
+        const response = await fetch(API_BASE + '/api/admin/payroll');
         if (!response.ok) {
             throw new Error('Failed to load payment details');
         }
@@ -86,7 +88,7 @@ function getStatusBadgeClass(status) {
 // Function to generate payroll
 async function generatePayroll() {
     try {
-        const response = await fetch('/api/admin/payroll/generate', {
+        const response = await fetch(API_BASE + '/api/admin/payroll/generate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -110,7 +112,7 @@ async function generatePayroll() {
 async function editPayment(paymentId) {
     try {
         // First, fetch the payment details
-        const response = await fetch(`/api/admin/payroll/${paymentId}`);
+        const response = await fetch(API_BASE + `/api/admin/payroll/${paymentId}`);
         if (!response.ok) {
             throw new Error('Failed to fetch payment details');
         }
@@ -183,7 +185,7 @@ async function savePaymentChanges(paymentId) {
         const deductions = document.getElementById('editDeductions').value;
         const status = document.getElementById('editStatus').value;
 
-        const response = await fetch(`/api/admin/payroll/${paymentId}`, {
+        const response = await fetch(API_BASE + `/api/admin/payroll/${paymentId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -220,7 +222,7 @@ async function deletePayment(paymentId) {
     }
 
     try {
-        const response = await fetch(`/api/admin/payroll/${paymentId}`, {
+        const response = await fetch(API_BASE + `/api/admin/payroll/${paymentId}`, {
             method: 'DELETE'
         });
 

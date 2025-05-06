@@ -10,7 +10,7 @@ $(document).ready(function() {
             status: $('#status').val()
         };
         $.ajax({
-            url: '/api/attendance',
+            url: 'http://localhost:3000/api/attendance',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(attendance),
@@ -30,7 +30,7 @@ $(document).ready(function() {
         const id = $(this).data('id');
         if (confirm('Are you sure you want to delete this attendance record?')) {
             $.ajax({
-                url: '/api/attendance/' + id,
+                url: 'http://localhost:3000/api/attendance/' + id,
                 method: 'DELETE',
                 success: function() {
                     fetchAttendance();

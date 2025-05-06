@@ -99,7 +99,9 @@
 
                 if (response.ok) {
                     document.getElementById('responseMessage').innerHTML = `<span class="text-success">${data.message}</span>`;
-                    console.log('Token:', data.token); // Save the token for future use
+                    localStorage.setItem('token', data.token); // Save the token
+                    window.location.href = 'Admin/admin-dashboard.html'; // Redirect to correct dashboard path
+                    return;
                 } else {
                     document.getElementById('responseMessage').innerHTML = `<span class="text-danger">${data.message}</span>`;
                 }

@@ -16,14 +16,30 @@ function setupEventListeners() {
         UiUtils.showLoading();
         
         $.ajax({
-            url: '/api/auth/login',
+            url: 'http://localhost:3000/api/auth/login',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ email, password, rememberMe }),
             success: function(response) {
                 AuthUtils.setToken(response.token);
                 AuthUtils.setUser(response.user);
-                window.location.href = '/dashboard.html';
+                // Redirect based on role
+                switch (response.user.role) {
+                    case 'admin':
+                        window.location.href = '/Admin/admin-dashboard.html';
+                        break;
+                    case 'hr':
+                        window.location.href = '/HR/hr-dashboard.html';
+                        break;
+                    case 'finance':
+                        window.location.href = '/Finance/finance-dashboard.html';
+                        break;
+                    case 'security':
+                        window.location.href = '/Security/security-dashboard.html';
+                        break;
+                    default:
+                        window.location.href = '/dashboard.html'; // fallback
+                }
             },
             error: function(xhr) {
                 UiUtils.showNotification(xhr.responseJSON?.message || 'Invalid email or password.', 'danger');

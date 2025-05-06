@@ -15,6 +15,14 @@
     <link href="../css/sb-admin-2.css" rel="stylesheet">
     <!-- Chart.js -->
     <script src="../vendor/chart.js/Chart.min.js"></script>
+    <script>
+        // Redirect to login if token is missing
+        if (!localStorage.getItem('token')) {
+            window.location.href = "../login.html";
+        } else {
+            console.log('Token in dashboard:', localStorage.getItem('token'));
+        }
+    </script>
 </head>
 
 <body id="page-top">

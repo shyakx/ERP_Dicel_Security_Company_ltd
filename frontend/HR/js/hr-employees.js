@@ -14,7 +14,7 @@ $(document).ready(function() {
             userid: 1 // Placeholder, should be set to the logged-in HR user's ID
         };
         $.ajax({
-            url: '/api/employees',
+            url: 'http://localhost:3000/api/employees',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(employee),
@@ -34,7 +34,7 @@ $(document).ready(function() {
         const id = $(this).data('id');
         if (confirm('Are you sure you want to delete this employee?')) {
             $.ajax({
-                url: '/api/employees/' + id,
+                url: 'http://localhost:3000/api/employees/' + id,
                 method: 'DELETE',
                 success: function() {
                     fetchEmployees();
@@ -48,7 +48,7 @@ $(document).ready(function() {
 });
 
 function fetchEmployees() {
-    $.get('/api/employees', function(data) {
+    $.get('http://localhost:3000/api/employees', function(data) {
         const tbody = $('#employeeTableBody');
         tbody.empty();
         data.forEach(emp => {

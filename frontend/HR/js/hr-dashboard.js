@@ -4,23 +4,25 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDashboardData();
 });
 
+const API_BASE = 'http://localhost:3000';
+
 // Function to load all dashboard data
 async function loadDashboardData() {
     try {
         // Load employee statistics
-        const employeeStats = await fetch('/api/hr/statistics').then(res => res.json());
+        const employeeStats = await fetch(API_BASE + '/api/hr/statistics').then(res => res.json());
         updateEmployeeStats(employeeStats);
 
         // Load recent employees
-        const recentEmployees = await fetch('/api/hr/recent-employees').then(res => res.json());
+        const recentEmployees = await fetch(API_BASE + '/api/hr/recent-employees').then(res => res.json());
         updateRecentEmployees(recentEmployees);
 
         // Load recent leave requests
-        const recentLeaves = await fetch('/api/hr/recent-leaves').then(res => res.json());
+        const recentLeaves = await fetch(API_BASE + '/api/hr/recent-leaves').then(res => res.json());
         updateRecentLeaves(recentLeaves);
 
         // Load today's attendance
-        const attendance = await fetch('/api/hr/today-attendance').then(res => res.json());
+        const attendance = await fetch(API_BASE + '/api/hr/today-attendance').then(res => res.json());
         updateTodayAttendance(attendance);
     } catch (error) {
         console.error('Error loading dashboard data:', error);

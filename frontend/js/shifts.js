@@ -8,10 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('updateShiftBtn').addEventListener('click', updateShift);
 });
 
+const API_BASE = 'http://localhost:3000';
+
 // Load all shifts
 async function loadShifts() {
     try {
-        const response = await fetch('/api/security/shifts');
+        const response = await fetch(API_BASE + '/api/security/shifts');
         if (!response.ok) {
             throw new Error('Failed to fetch shifts');
         }
@@ -26,7 +28,7 @@ async function loadShifts() {
 // Load all guards for dropdowns
 async function loadGuards() {
     try {
-        const response = await fetch('/api/security/guards');
+        const response = await fetch(API_BASE + '/api/security/guards');
         if (!response.ok) {
             throw new Error('Failed to fetch guards');
         }
@@ -134,7 +136,7 @@ async function addShift() {
     };
 
     try {
-        const response = await fetch('/api/security/shifts', {
+        const response = await fetch(API_BASE + '/api/security/shifts', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -160,7 +162,7 @@ async function addShift() {
 // Edit shift
 async function editShift(id) {
     try {
-        const response = await fetch(`/api/security/shifts/${id}`);
+        const response = await fetch(API_BASE + `/api/security/shifts/${id}`);
         if (!response.ok) {
             throw new Error('Failed to fetch shift details');
         }
@@ -207,7 +209,7 @@ async function updateShift() {
     };
 
     try {
-        const response = await fetch(`/api/security/shifts/${id}`, {
+        const response = await fetch(API_BASE + `/api/security/shifts/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -237,7 +239,7 @@ async function deleteShift(id) {
     }
 
     try {
-        const response = await fetch(`/api/security/shifts/${id}`, {
+        const response = await fetch(API_BASE + `/api/security/shifts/${id}`, {
             method: 'DELETE'
         });
 

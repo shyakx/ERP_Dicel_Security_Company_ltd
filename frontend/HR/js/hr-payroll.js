@@ -13,7 +13,7 @@ $(document).ready(function() {
             status: $('#status').val()
         };
         $.ajax({
-            url: '/api/payroll',
+            url: 'http://localhost:3000/api/payroll',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(payroll),
@@ -33,7 +33,7 @@ $(document).ready(function() {
         const id = $(this).data('id');
         if (confirm('Are you sure you want to delete this payroll record?')) {
             $.ajax({
-                url: '/api/payroll/' + id,
+                url: 'http://localhost:3000/api/payroll/' + id,
                 method: 'DELETE',
                 success: function() {
                     fetchPayroll();
@@ -47,7 +47,7 @@ $(document).ready(function() {
 });
 
 function fetchPayroll() {
-    $.get('/api/payroll', function(data) {
+    $.get('http://localhost:3000/api/payroll', function(data) {
         const tbody = $('#payrollTableBody');
         tbody.empty();
         let totalPayroll = 0, totalSalary = 0, totalDeductions = 0, totalNet = 0;

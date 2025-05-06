@@ -7,10 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('updateGuardBtn').addEventListener('click', updateGuard);
 });
 
+const API_BASE = 'http://localhost:3000';
+
 // Load all guards
 async function loadGuards() {
     try {
-        const response = await fetch('/api/security/guards');
+        const response = await fetch(API_BASE + '/api/security/guards');
         if (!response.ok) {
             throw new Error('Failed to fetch guards');
         }
@@ -85,7 +87,7 @@ async function addGuard() {
     };
 
     try {
-        const response = await fetch('/api/security/guards', {
+        const response = await fetch(API_BASE + '/api/security/guards', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -111,7 +113,7 @@ async function addGuard() {
 // Edit guard
 async function editGuard(id) {
     try {
-        const response = await fetch(`/api/security/guards/${id}`);
+        const response = await fetch(API_BASE + `/api/security/guards/${id}`);
         if (!response.ok) {
             throw new Error('Failed to fetch guard details');
         }
@@ -156,7 +158,7 @@ async function updateGuard() {
     };
 
     try {
-        const response = await fetch(`/api/security/guards/${id}`, {
+        const response = await fetch(API_BASE + `/api/security/guards/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -186,7 +188,7 @@ async function deleteGuard(id) {
     }
 
     try {
-        const response = await fetch(`/api/security/guards/${id}`, {
+        const response = await fetch(API_BASE + `/api/security/guards/${id}`, {
             method: 'DELETE'
         });
 

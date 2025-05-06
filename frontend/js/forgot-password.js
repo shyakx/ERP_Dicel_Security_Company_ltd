@@ -14,7 +14,7 @@ function setupEventListeners() {
         UiUtils.showLoading();
         
         $.ajax({
-            url: '/api/auth/forgot-password',
+            url: 'http://localhost:3000/api/auth/forgot-password',
             method: 'POST',
             data: { email },
             success: function() {

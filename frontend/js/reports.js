@@ -35,7 +35,7 @@ $(document).ready(function() {
 // Load departments into select
 function loadDepartments() {
     $.ajax({
-        url: '/api/departments',
+        url: 'http://localhost:3000/api/departments',
         method: 'GET',
         success: function(response) {
             const select = $('#department');
@@ -80,7 +80,7 @@ function loadAllReports() {
 // Load Financial Report
 function loadFinancialReport() {
     $.ajax({
-        url: '/api/reports/financial-overview',
+        url: 'http://localhost:3000/api/reports/financial-overview',
         method: 'GET',
         data: { startDate, endDate },
         success: function(response) {
@@ -103,7 +103,7 @@ function loadFinancialReport() {
 // Load Employee Management Report
 function loadEmployeeManagementReport() {
     $.ajax({
-        url: '/api/reports/employee-management',
+        url: 'http://localhost:3000/api/reports/employee-management',
         method: 'GET',
         success: function(response) {
             // Update summary cards
@@ -163,7 +163,7 @@ function loadDepartmentReport() {
 // Load System Logs
 function loadSystemLogs() {
     $.ajax({
-        url: '/api/reports/system-logs',
+        url: 'http://localhost:3000/api/reports/system-logs',
         method: 'GET',
         data: { startDate, endDate },
         success: function(response) {

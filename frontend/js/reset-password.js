@@ -38,7 +38,7 @@ function setupEventListeners() {
         UiUtils.showLoading();
         
         $.ajax({
-            url: '/api/auth/reset-password',
+            url: 'http://localhost:3000/api/auth/reset-password',
             method: 'POST',
             data: { token, password },
             success: function() {
